@@ -11,9 +11,15 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import sys
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+sys.path.insert(0, BASE_DIR)
+sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
+sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
 
 
 # Quick-start development settings - unsuitable for production
@@ -82,7 +88,7 @@ DATABASES = {
         'PASSWORD': 'root',  # 数据库密码
         'HOST': '127.0.0.1', # 数据库主机，留空默认为localhost
         'PORT': 3306, # 数据库端口
-        'OPTIONS': {'charset': 'utf8mb4'},
+        'OPTIONS': {'init_command': 'SET storage_engine=INNODB;'} # 数据库引擎 用于后期第三方登录数据表的建立
     }
 }
 
