@@ -151,7 +151,7 @@ USE_TZ = False   #默认是Ture，时间是utc时间，由于我们要用本地�
 
 
 AUTHENTICATION_BACKENDS = (
-    # 使用自定义的用户验证
+    # 使用自定义的用户验证, 用户登录时调用 users.views.CustomBackend验证
     'users.views.CustomBackend',
 )
 
@@ -198,3 +198,13 @@ else:
 
 #手机号码正则表达式
 REGEX_MOBILE = "^1[358]\d{9}$|^147\d{8}$|^176\d{8}$"
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}

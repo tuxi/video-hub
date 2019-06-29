@@ -11,7 +11,9 @@ from django.db import models
 from django.utils import timezone as datetime
 
 from videokit.models import VideoField
-from VideoHub.settings import AUTH_USER_MODEL
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class VideoCategory(models.Model):
     '''
@@ -115,7 +117,7 @@ class Video(models.Model):
     # 视频观看次数
     view_num = models.PositiveIntegerField(default=0, verbose_name="视频观看次数")
     click_num = models.IntegerField(default=0, verbose_name="点击数", help_text="点击数")
-    users = models.ForeignKey(AUTH_USER_MODEL, verbose_name='用户', on_delete=models.CASCADE)
+    users = models.ForeignKey(User, verbose_name='用户', on_delete=models.CASCADE)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='p', verbose_name='视频状态',)
     location = models.ForeignKey(LocationItem, verbose_name='所在位置', on_delete=models.CASCADE, null=True, blank=True)
     content = models.CharField(max_length=200, unique=False, verbose_name="标题")

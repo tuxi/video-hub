@@ -21,6 +21,9 @@ from .models import VerifyCode
 User = get_user_model()
 
 class CustomBackend(ModelBackend):
+    '''
+    用于权限验证
+    '''
     def authenticate(self, request, username=None, password=None, **kwargs):
         '''
         自定义用户验证

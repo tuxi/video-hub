@@ -49,6 +49,9 @@ urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
     url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
     url(r'^', include(router.urls)),
+
+    # drf自带的认证方式
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     # jwt的认证方式
     url(r'^login/', obtain_jwt_token),
     # drf 文档

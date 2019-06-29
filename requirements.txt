@@ -10,7 +10,7 @@ django-qiniu-storage==2.3.1
 django-redis==4.8.0
 django-reversion==2.0.9
 djangorestframework==3.6.3
-djangorestframework-jwt==1.11.0
+djangorestframework-jwt==1.11.0 # 用户权限认证
 drf-extensions==0.3.1
 mysqlclient
 celery==4.0.2

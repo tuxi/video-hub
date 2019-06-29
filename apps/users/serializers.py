@@ -87,7 +87,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         #     pass
         # except VerifyCode.MultipleObjectsReturned as e:
         #     pass
-        verify_records = VerifyCode.objects.filter(mobile=self.initial_data["username"]).order_by("-add_time")
+        verify_records = VerifyCode.objects.filter(mobile=self.initial_data["mobile"]).order_by("-add_time")
         if verify_records:
             last_record = verify_records[0]
 
@@ -108,7 +108,8 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         :param attrs:
         :return:
         '''
-        attrs["mobile"] = attrs["username"]
+        if "mobile" not in attrs:
+            attrs["mobile"] = attrs["username"]
         del attrs["code"]
         return attrs
 
