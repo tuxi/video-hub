@@ -45,6 +45,14 @@ INSTALLED_APPS = [
     'videokit.apps.VideokitConfig',
 ]
 
+
+PERSONAL_APPS = [
+    'haystack',
+    'video.apps.VideoConfig',
+]
+
+INSTALLED_APPS += PERSONAL_APPS
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
