@@ -88,7 +88,7 @@ DATABASES = {
         'PASSWORD': 'root',  # 数据库密码
         'HOST': '127.0.0.1', # 数据库主机，留空默认为localhost
         'PORT': 3306, # 数据库端口
-        'OPTIONS': {'init_command': 'SET storage_engine=INNODB;'} # 数据库引擎 用于后期第三方登录数据表的建立
+        "OPTIONS": {"init_command":  "SET default_storage_engine=INNODB;"}
     }
 }
 
