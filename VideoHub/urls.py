@@ -25,10 +25,32 @@ from VideoHub.settings import MEDIA_ROOT, STATICFILES_DIRS
 
 import xadmin
 
+from users.views import SmsCodeViewSet, UserViewSet
+from video.views.apiview import VideoListViewSet, CategoryViewSet, HotSearchsViewSet
+
+# 通过router绑定url
 router = DefaultRouter()
+# 配置goods url
+router.register(r'videos', VideoListViewSet, base_name="videos")
+# 配置category url
+router.register(r'categorys', CategoryViewSet, base_name='categorys')
+# 验证码
+router.register(r'code', SmsCodeViewSet, base_name='code')
+# 热门搜索
+router.register(r'hotsearchs', HotSearchsViewSet, base_name='hotsearchs')
+# 用户
+router.register(r'users', UserViewSet, 'users')
+
+video_list = VideoListViewSet.as_view({
+    'get': 'list',
+})
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
     url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
     url(r'^', include(router.urls)),
+    # jwt的认证方式
+    url(r'^login/', obtain_jwt_token),
+    # drf 文档
+    url(r'docs/', include_docs_urls(title="Video hub api docs")),
 ]

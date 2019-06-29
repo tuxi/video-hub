@@ -91,7 +91,7 @@ msgid "Title"
 msgstr ""
 
 #: models.py:49 models.py:88 models.py:107 models.py:149
-msgid "user"
+msgid "users"
 msgstr ""
 
 #: models.py:50
@@ -352,7 +352,7 @@ msgid "bookmark"
 msgstr ""
 
 #: plugins/bookmark.py:176
-msgid "Bookmark Widget, can show user's bookmark list data in widget."
+msgid "Bookmark Widget, can show users's bookmark list data in widget."
 msgstr ""
 
 #: plugins/chart.py:25
@@ -677,7 +677,7 @@ msgstr ""
 #, python-format
 msgid ""
 "You're receiving this e-mail because you requested a password reset for your "
-"user account at %(site_name)s."
+"users account at %(site_name)s."
 msgstr ""
 
 #: templates/xadmin/auth/password_reset/email.html:4
@@ -717,7 +717,7 @@ msgstr ""
 
 #: templates/xadmin/auth/user/add_form.html:6
 msgid ""
-"First, enter a username and password. Then, you'll be able to edit more user "
+"First, enter a username and password. Then, you'll be able to edit more users "
 "options."
 msgstr ""
 
@@ -741,7 +741,7 @@ msgstr ""
 
 #: templates/xadmin/auth/user/change_password.html:40
 #, python-format
-msgid "Enter a new password for the user <strong>%(username)s</strong>."
+msgid "Enter a new password for the users <strong>%(username)s</strong>."
 msgstr ""
 
 #: templates/xadmin/base_site.html:18
@@ -1059,7 +1059,7 @@ msgstr ""
 msgid ""
 "Something's wrong with your database installation. Make sure the appropriate "
 "database tables have been created, and make sure the database is readable by "
-"the appropriate user."
+"the appropriate users."
 msgstr ""
 
 #: templates/xadmin/views/logged_out.html:16

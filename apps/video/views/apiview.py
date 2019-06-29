@@ -33,7 +33,7 @@ class VideoPagination(PageNumberPagination):
 
 class VideoListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     '''
-   商品列表页, 分页， 搜索， 过滤， 排序
+   视频列表页, 分页， 搜索， 过滤， 排序
     '''
     queryset = Video.objects.all()
     serializer_class = GoodsSerializer
@@ -56,9 +56,9 @@ class VideoListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
 class CategoryViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     '''
     list:
-        商品分类列表数据
+        视频分类列表数据
     retrieve:
-        获取商品分类详情
+        获取视频分类详情
     '''
     # 继承mixins.RetrieveModelMixin后，就可以通过非id参数访问某个详情，连url都不需要配置了
     queryset = VideoCategory.objects.filter(category_type=1)

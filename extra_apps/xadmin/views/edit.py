@@ -437,7 +437,7 @@ class CreateAdminView(ModelFormAdminView):
         else:
             self.message_user(msg, 'success')
 
-            # Figure out where to redirect. If the user has change permission,
+            # Figure out where to redirect. If the users has change permission,
             # redirect to the change-list page for this object. Otherwise,
             # redirect to the admin index.
             if "_redirect" in request.POST:
@@ -531,7 +531,7 @@ class UpdateAdminView(ModelFormAdminView):
             return self.model_admin_url('add')
         else:
             self.message_user(msg, 'success')
-            # Figure out where to redirect. If the user has change permission,
+            # Figure out where to redirect. If the users has change permission,
             # redirect to the change-list page for this object. Otherwise,
             # redirect to the admin index.
             if "_redirect" in request.POST:

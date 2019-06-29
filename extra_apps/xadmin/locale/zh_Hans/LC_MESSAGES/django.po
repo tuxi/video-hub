@@ -94,7 +94,7 @@ msgid "Title"
 msgstr "标题"
 
 #: models.py:49 models.py:88 models.py:107 models.py:149
-msgid "user"
+msgid "users"
 msgstr "用户"
 
 #: models.py:50
@@ -350,7 +350,7 @@ msgid "bookmark"
 msgstr "书签"
 
 #: plugins/bookmark.py:176
-msgid "Bookmark Widget, can show user's bookmark list data in widget."
+msgid "Bookmark Widget, can show users's bookmark list data in widget."
 msgstr "书签组件，展示用户书签页内容。"
 
 #: plugins/chart.py:25
@@ -671,7 +671,7 @@ msgstr ""
 #, python-format
 msgid ""
 "You're receiving this e-mail because you requested a password reset for your "
-"user account at %(site_name)s."
+"users account at %(site_name)s."
 msgstr "因为你要求重置 %(site_name)s 上的账户密码, 所以收到了这封邮件."
 
 #: templates/xadmin/auth/password_reset/email.html:4
@@ -713,7 +713,7 @@ msgstr "重设我的密码"
 
 #: templates/xadmin/auth/user/add_form.html:6
 msgid ""
-"First, enter a username and password. Then, you'll be able to edit more user "
+"First, enter a username and password. Then, you'll be able to edit more users "
 "options."
 msgstr "首先，输入一个用户名和密码。然后，你就可以编辑更多的用户选项。"
 
@@ -735,7 +735,7 @@ msgstr "输入你的新密码"
 
 #: templates/xadmin/auth/user/change_password.html:40
 #, python-format
-msgid "Enter a new password for the user <strong>%(username)s</strong>."
+msgid "Enter a new password for the users <strong>%(username)s</strong>."
 msgstr "为用户 <strong>%(username)s</strong> 输入一个新的密码。"
 
 #: templates/xadmin/base_site.html:18
@@ -1051,7 +1051,7 @@ msgstr "添加小组件"
 msgid ""
 "Something's wrong with your database installation. Make sure the appropriate "
 "database tables have been created, and make sure the database is readable by "
-"the appropriate user."
+"the appropriate users."
 msgstr ""
 "你的数据库安装有误。确保已经创建了相应的数据库表，并确保数据库可被相关的用户"
 "读取。"

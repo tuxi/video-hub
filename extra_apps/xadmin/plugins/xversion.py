@@ -588,10 +588,10 @@ class VersionInline(object):
 class ReversionAdmin(object):
     model_icon = 'fa fa-exchange'
 
-    list_display = ('__str__', 'date_created', 'user', 'comment')
+    list_display = ('__str__', 'date_created', 'users', 'comment')
     list_display_links = ('__str__',)
 
-    list_filter = ('date_created', 'user')
+    list_filter = ('date_created', 'users')
     inlines = [VersionInline]
 
 site.register(Revision, ReversionAdmin)

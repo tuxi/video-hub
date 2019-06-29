@@ -102,7 +102,7 @@ msgid "Title"
 msgstr "Titulo"
 
 #: models.py:49 models.py:88 models.py:107 models.py:149
-msgid "user"
+msgid "users"
 msgstr ""
 
 #: models.py:50
@@ -376,7 +376,7 @@ msgid "bookmark"
 msgstr "Marcador"
 
 #: plugins/bookmark.py:176
-msgid "Bookmark Widget, can show user's bookmark list data in widget."
+msgid "Bookmark Widget, can show users's bookmark list data in widget."
 msgstr ""
 "Widget de marcador, puede mostrar datos de la lista de favoritos del usuario "
 "en el widget."
@@ -720,7 +720,7 @@ msgstr ""
 #, python-format
 msgid ""
 "You're receiving this e-mail because you requested a password reset for your "
-"user account at %(site_name)s."
+"users account at %(site_name)s."
 msgstr ""
 "Tu has recibido este correo debido a que has solicitado restablecimiento de "
 "contraseña para tu cuenta de usuario en %(site_name)s."
@@ -764,7 +764,7 @@ msgstr "Cambiar contraseña"
 
 #: templates/xadmin/auth/user/add_form.html:6
 msgid ""
-"First, enter a username and password. Then, you'll be able to edit more user "
+"First, enter a username and password. Then, you'll be able to edit more users "
 "options."
 msgstr ""
 "Primero, ingrese usuario y contraseña. Luego, sera capaz de editar mas "
@@ -789,7 +789,7 @@ msgstr "Ingresa una nueva contraseña"
 
 #: templates/xadmin/auth/user/change_password.html:40
 #, python-format
-msgid "Enter a new password for the user <strong>%(username)s</strong>."
+msgid "Enter a new password for the users <strong>%(username)s</strong>."
 msgstr ""
 "Introduzca una nueva contraseña para el usuario <strong>%(username)s</strong>"
 
@@ -1110,7 +1110,7 @@ msgstr "Añadir Widget"
 msgid ""
 "Something's wrong with your database installation. Make sure the appropriate "
 "database tables have been created, and make sure the database is readable by "
-"the appropriate user."
+"the appropriate users."
 msgstr ""
 "Algo está mal con tu instalación de base de datos. Asegúrese de que las "
 "tablas de la bases de datos se han creado apropiadamente, y asegúrese de que "

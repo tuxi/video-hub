@@ -158,9 +158,9 @@ class BookmarkView(ModelAdminView):
 class BookmarkAdmin(object):
 
     model_icon = 'fa fa-book'
-    list_display = ('title', 'user', 'url_name', 'query')
+    list_display = ('title', 'users', 'url_name', 'query')
     list_display_links = ('title',)
-    user_fields = ['user']
+    user_fields = ['users']
     hidden_menu = True
 
     def queryset(self):
@@ -171,7 +171,7 @@ class BookmarkAdmin(object):
     def get_list_display(self):
         list_display = super(BookmarkAdmin, self).get_list_display()
         if not self.user.is_superuser:
-            list_display.remove('user')
+            list_display.remove('users')
         return list_display
 
 
@@ -187,7 +187,7 @@ class BookmarkWidget(PartialBaseWidget):
     widget_type = _('bookmark')
     widget_icon = 'fa fa-bookmark'
     description = _(
-        'Bookmark Widget, can show user\'s bookmark list data in widget.')
+        'Bookmark Widget, can show users\'s bookmark list data in widget.')
     template = "xadmin/widgets/list.html"
 
     bookmark = ModelChoiceField(

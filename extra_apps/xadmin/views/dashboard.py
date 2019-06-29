@@ -75,10 +75,10 @@ class WidgetTypeSelect(forms.Widget):
 class UserWidgetAdmin(object):
 
     model_icon = 'fa fa-dashboard'
-    list_display = ('widget_type', 'page_id', 'user')
-    list_filter = ['user', 'widget_type', 'page_id']
+    list_display = ('widget_type', 'page_id', 'users')
+    list_filter = ['users', 'widget_type', 'page_id']
     list_display_links = ('widget_type',)
-    user_fields = ['user']
+    user_fields = ['users']
     hidden_menu = True
 
     wizard_form_list = (
@@ -113,12 +113,12 @@ class UserWidgetAdmin(object):
         value = dict([(f.name, f.value()) for f in form])
         widget.set_value(value)
         cleaned_data['value'] = widget.value
-        cleaned_data['user'] = self.user
+        cleaned_data['users'] = self.user
 
     def get_list_display(self):
         list_display = super(UserWidgetAdmin, self).get_list_display()
         if not self.user.is_superuser:
-            list_display.remove('user')
+            list_display.remove('users')
         return list_display
 
     def queryset(self):
@@ -583,7 +583,7 @@ class Dashboard(CommAdminView):
             'columns': [('col-sm-%d' % int(12 / len(self.widgets)), ws) for ws in self.widgets],
             'has_add_widget_permission': self.has_model_perm(UserWidget, 'add') and self.widget_customiz,
             'add_widget_url': self.get_admin_url('%s_%s_add' % (UserWidget._meta.app_label, UserWidget._meta.model_name)) +
-            "?user=%s&page_id=%s&_redirect=%s" % (self.user.id, self.get_page_id(), urlquote(self.request.get_full_path()))
+            "?users=%s&page_id=%s&_redirect=%s" % (self.user.id, self.get_page_id(), urlquote(self.request.get_full_path()))
         }
         context = super(Dashboard, self).get_context()
         context.update(new_context)

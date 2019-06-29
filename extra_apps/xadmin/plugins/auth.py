@@ -64,7 +64,7 @@ class UserAdmin(object):
     search_fields = ('username', 'first_name', 'last_name', 'email')
     ordering = ('username',)
     style_fields = {'user_permissions': 'm2m_transfer'}
-    model_icon = 'fa fa-user'
+    model_icon = 'fa fa-users'
     relfield_style = 'fk-ajax'
 
     def get_field_attrs(self, db_field, **kwargs):
@@ -146,7 +146,7 @@ site.register_plugin(UserFieldPlugin, ModelFormAdminView)
 class ModelPermissionPlugin(BaseAdminPlugin):
 
     user_can_access_owned_objects_only = False
-    user_owned_objects_field = 'user'
+    user_owned_objects_field = 'users'
 
     def queryset(self, qs):
         if self.user_can_access_owned_objects_only and \
@@ -211,7 +211,7 @@ class ChangePasswordView(ModelAdminView):
     def get_response(self):
         return TemplateResponse(self.request, [
             self.change_user_password_template or
-            'xadmin/auth/user/change_password.html'
+            'xadmin/auth/users/change_password.html'
         ], self.get_context())
 
     @method_decorator(sensitive_post_parameters())

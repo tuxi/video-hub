@@ -268,8 +268,8 @@ class DateFieldListFilter(ListFieldFilter):
             field, request, params, model, admin_view, field_path)
 
         now = timezone.now()
-        # When time zone support is enabled, convert "now" to the user's time
-        # zone so Django's definition of "Today" matches what the user expects.
+        # When time zone support is enabled, convert "now" to the users's time
+        # zone so Django's definition of "Today" matches what the users expects.
         if now.tzinfo is not None:
             current_tz = timezone.get_current_timezone()
             now = now.astimezone(current_tz)

@@ -82,7 +82,7 @@ class DeleteSelectedAction(BaseActionView):
 
     @filter_hook
     def do_action(self, queryset):
-        # Check that the user has delete permission for the actual model
+        # Check that the users has delete permission for the actual model
         if not self.has_delete_permission():
             raise PermissionDenied
 
@@ -93,7 +93,7 @@ class DeleteSelectedAction(BaseActionView):
         deletable_objects, model_count, perms_needed, protected = get_deleted_objects(
             queryset, self.opts, self.user, self.admin_site, using)
 
-        # The user has already confirmed the deletion.
+        # The users has already confirmed the deletion.
         # Do the deletion and return a None to display the change list view again.
         if self.request.POST.get('post'):
             if perms_needed:

@@ -11,7 +11,7 @@ from .models import Video
 
 class VideoFilter(django_filters.rest_framework.FilterSet):
     '''
-    商品过滤类
+    视频过滤类
     '''
     begin_time = django_filters.NumberFilter(name='audit_completed_time', help_text="起始时间", lookup_expr='gte')
     end_time = django_filters.NumberFilter(name='audit_completed_time', help_text='结束时间', lookup_expr='lte')

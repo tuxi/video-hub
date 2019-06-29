@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 import sys
+from VideoHub.private_config import YUNPIAN_APIKEY
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -33,6 +34,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = 'users.UserProfile'
 
 # Application definition
 
@@ -51,11 +53,13 @@ EXTRA_APPS = [
     'django_filters',
     'crispy_forms',
     'rest_framework',
-    'corsheaders',
+    'corsheaders', # 跨域访问 解决
+    'rest_framework.authtoken',  # 用户登录
 ]
 
 PERSONAL_APPS = [
     'video.apps.VideoConfig',
+    'users.apps.UsersConfig',
 ]
 
 INSTALLED_APPS += PERSONAL_APPS + EXTRA_APPS
@@ -135,6 +139,31 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+# Internationalization
+# https://docs.djangoproject.com/en/1.11/topics/i18n/
+#设置时区
+LANGUAGE_CODE = 'zh-hans'  #中文支持，django1.8以后支持；1.8以前是zh-cn
+TIME_ZONE = 'Asia/Shanghai'
+USE_I18N = True
+USE_L10N = True
+USE_TZ = False   #默认是Ture，时间是utc时间，由于我们要用本地时间，所用手动修改为false！！！！
+
+
+AUTHENTICATION_BACKENDS = (
+    # 使用自定义的用户验证
+    'users.views.CustomBackend',
+)
+
+import datetime
+JWT_AUTH = {
+    # JWT过期时间
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
+    # 需要前端在request 的 headers 中 为JWT，只要前后端相同即可
+    'JWT_AUTH_HEADER_PREFIX': 'JWT',
+}
+
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
@@ -146,18 +175,6 @@ REST_FRAMEWORK = {
 }
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/1.11/topics/i18n/
-
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-
-USE_L10N = True
-
-USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
@@ -178,3 +195,6 @@ else:
     DEFAULT_FILE_STORAGE = 'qiniustorage.backends.QiniuMediaStorage'
     MEDIA_URL = 'https://static.kuwe.top/'
     MEDIA_ROOT = ''
+
+#手机号码正则表达式
+REGEX_MOBILE = "^1[358]\d{9}$|^147\d{8}$|^176\d{8}$"
