@@ -32,7 +32,7 @@ SECRET_KEY = '_x-$8!ku_q!shjw5^p1)k#mbe0%_q=u3vhw2a=y8lh%$q#ov*4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['10.211.55.4', '127.0.0.1']
 
 AUTH_USER_MODEL = 'users.UserProfile'
 
@@ -161,6 +161,8 @@ JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
     # 需要前端在request 的 headers 中 为JWT，只要前后端相同即可
     'JWT_AUTH_HEADER_PREFIX': 'JWT',
+    # 自定义jwt返回数据 编写返回的数据, 这里把user和token同时返回给客户端
+    'JWT_RESPONSE_PAYLOAD_HANDLER':'users.views.jwt_response_payload_handler',
 }
 
 

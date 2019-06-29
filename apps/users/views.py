@@ -140,3 +140,20 @@ class UserViewSet(CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, viewse
     def perform_create(self, serializer):
         # 重载此方法 返回user
         return serializer.save()
+
+def jwt_response_payload_handler(token, user=None, request=None):
+   """
+   登录成功后自定义返回
+   :param token:
+   :param user:
+   :param request:
+   :return:
+   """
+   dict = {
+        "code":2000,
+        "data": {
+            "token": token,
+            'user': UserDetailSerializer(user, context={'request': request}).data
+        }
+   }
+   return dict
