@@ -123,18 +123,18 @@ class Video(models.Model):
 
     is_active = models.BooleanField(default=True, verbose_name="是否激活", help_text="是否激活")
     is_commentable = models.BooleanField(default=True, verbose_name="是否可评论", help_text="是否可评论")
-    browse_password = models.CharField(max_length=20, null=True, blank=True, verbose_name="浏览密码", help_text="浏览密码")
-    browse_password_encrypt = models.CharField(max_length=100, null=True, blank=True, verbose_name="浏览密码加密",
-                                               help_text="浏览密码加密")
+    # browse_password = models.CharField(max_length=20, null=True, blank=True, verbose_name="浏览密码", help_text="浏览密码")
+    # browse_password_encrypt = models.CharField(max_length=100, null=True, blank=True, verbose_name="浏览密码加密",
+    #                                            help_text="浏览密码加密")
 
-    def save(self, *args, **kwargs):
-        if self.browse_password and len(self.browse_password) > 0:
-            md5 = hashlib.md5()
-            md5.update(self.browse_password.encode('utf8'))
-            self.browse_password_encrypt = md5.hexdigest()
-        else:
-            self.browse_password_encrypt = None
-        super(Video, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if self.browse_password and len(self.browse_password) > 0:
+    #         md5 = hashlib.md5()
+    #         md5.update(self.browse_password.encode('utf8'))
+    #         self.browse_password_encrypt = md5.hexdigest()
+    #     else:
+    #         self.browse_password_encrypt = None
+    #     super(Video, self).save(*args, **kwargs)
     class Meta:
         verbose_name = '视频'
         verbose_name_plural = verbose_name

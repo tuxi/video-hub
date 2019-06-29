@@ -16,30 +16,14 @@ class VideoListView(View):
         :return:
         '''
 
-        json_list = []
         # 取出数据库中前十个video
         videos = Video.objects.all()[:10]
-
-        # 手动将models转换为json
-        # for video in videos:
-        #     json_dict = {}
-        #     json_dict["name"] = video.name
-        #     json_dict["category"] = video.category.name
-        #     json_dict["market_price"] = video.market_price
-        #     json_list.append(json_dict)
-
-        # 通过model_to_dict将model转换为json
-        # 这里会遇到问题，将model中所以的字段转换为json，导致TypeError: Object of type 'ImageFieldFile' is not JSON serializable
-        # from django.forms.models import model_to_dict
-        # for good in goods:
-        #     json_dict = model_to_dict(good)
-        #     json_list.append(json_dict)
 
         # 通过serializers序列化json
         from django.core import serializers
         import json
         json_data = serializers.serialize('json', videos)
-        json_data = json.loads(json_data)
+        json_list = json.loads(json_data)
 
         from django.http import JsonResponse
-        return JsonResponse(json_data, safe=False)
+        return JsonResponse(json_list, safe=False)
