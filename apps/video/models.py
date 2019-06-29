@@ -106,11 +106,11 @@ class Video(models.Model):
     # 封面的长度，决定webp的播放时间
     cover_duration = models.FloatField(null=True, blank=True, verbose_name="封面的长度，决定webp的播放时间")
     # 视频上传的时间
-    upload_time = models.DateTimeField('上传时间', default=datetime.now, verbose_name="视频上传的时间")
+    upload_time = models.DateTimeField(default=datetime.now, verbose_name="视频上传的时间")
     # 视频首次添加时间
     first_add_time = models.DateTimeField(default=datetime.now, verbose_name="视频首次添加时间")
     # 视频审核完成时间，此时间由服务端控制
-    audit_completed_time = models.DateTimeField('发布时间', blank=True, null=True, verbose_name="视频审核完成时间，此时间由服务端控制")
+    audit_completed_time = models.DateTimeField(blank=True, null=True, verbose_name="视频审核完成时间，此时间由服务端控制")
     # 视频观看次数
     view_num = models.PositiveIntegerField(default=0, verbose_name="视频观看次数")
     click_num = models.IntegerField(default=0, verbose_name="点击数", help_text="点击数")

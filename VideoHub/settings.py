@@ -45,13 +45,20 @@ INSTALLED_APPS = [
     'videokit.apps.VideokitConfig',
 ]
 
+EXTRA_APPS = [
+    'xadmin',
+    'DjangoUeditor',
+    'django_filters',
+    'crispy_forms',
+    'rest_framework',
+    'corsheaders',
+]
 
 PERSONAL_APPS = [
-    'haystack',
     'video.apps.VideoConfig',
 ]
 
-INSTALLED_APPS += PERSONAL_APPS
+INSTALLED_APPS += PERSONAL_APPS + EXTRA_APPS
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -63,6 +70,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 
 # 必须跟原域匹配才可获取发送 cookie 的权限
 CORS_ORIGIN_REGEX_WHITELIST = r'.*'
@@ -156,3 +164,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+# 部署的时候注释掉，不然无法执行collecstatic命令，运行时打开
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+if DEBUG==True:
+    # 线下存储在本地，线上存储在七牛云
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+else:
+    # 线上环境，从七牛云读取
+    DEFAULT_FILE_STORAGE = 'qiniustorage.backends.QiniuMediaStorage'
+    MEDIA_URL = 'https://static.kuwe.top/'
+    MEDIA_ROOT = ''
