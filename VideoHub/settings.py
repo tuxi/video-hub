@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -53,6 +54,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# 必须跟原域匹配才可获取发送 cookie 的权限
+CORS_ORIGIN_REGEX_WHITELIST = r'.*'
+# 必须有这个才接受前端跨域发送 cookie
+CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'VideoHub.urls'
 
@@ -68,6 +74,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',  # 用于在模板中使用{{MEDIA_URL}}
             ],
         },
     },
@@ -110,6 +117,16 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        # 全局配置 将用户请求的数据进行验证，将user取出来
+        # 不需要全局配置，在需要的地方配置
+       # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    )
+}
 
 
 # Internationalization
