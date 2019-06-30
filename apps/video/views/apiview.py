@@ -14,6 +14,9 @@ from django_filters.rest_framework import DjangoFilterBackend
 from video.models import Video, VideoCategory, HotSearchWords
 from video.serializers import GoodsSerializer, CategorySerializer, HotWordsSerializer
 
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+
+from video.serializers import VideoCreateSerializer, VideoDetailSerializer
 
 # Create your views here.
 
@@ -70,3 +73,22 @@ class HotSearchsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     '''
     queryset = HotSearchWords.objects.all().order_by('-index')
     serializer_class = HotWordsSerializer
+
+class VideoViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    '''
+    retrieve:
+        获取视频详情
+    create:
+        创建视频
+    '''
+    queryset = Video.objects.all()
+
+    authentication_classes = (JSONWebTokenAuthentication, authentication.SessionAuthentication)
+
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return VideoDetailSerializer
+        elif self.action == "create":
+            return VideoCreateSerializer
+
+        return VideoDetailSerializer

@@ -53,16 +53,6 @@ class VideoCategory(models.Model):
     def __str__(self):
         return '{0} - {1} - {2}'.format(self.name, self.get_category_type_display(), self.get_category_level_display())
 
-class LocationItem(models.Model):
-    #经度
-    longitude = models.FloatField(null=False, blank=False)
-    #纬度
-    latitude = models.FloatField(null=False, blank=False)
-    name = models.CharField('poi本地化名称', max_length=200, unique=False)
-    address = models.CharField('poi地址', max_length=300, unique=False)
-
-    def __str__(self):
-        return self.name + self.address
 
 def upload_to(instance, filename):
     return 'media_items{filename}'.format(filename=filename)
@@ -76,12 +66,18 @@ class Video(models.Model):
         ('p', '发布'),
     )
 
+    # 视频来源
+    VIDEO_SOURCE = (
+        ('c', '相机'),
+        ('a', '相册')
+    )
+
     video = VideoField(upload_to=upload_to,
                        width_field='video_width', height_field='video_height',
                        rotation_field='video_rotation',
                        mimetype_field='video_mimetype',
                        duration_field='video_duration',
-                       thumbnail_field='video_thumbnail',
+                       thumbnail_field='video_cover_image',
                        animated_webp_field='video_animated_webp',
                        # gif_field='video_gif',
                        mp4_field='video_mp4',
@@ -105,39 +101,54 @@ class Video(models.Model):
     # 视频前10秒的wep动图，和gif的功能基本相同，使用webp是为了优化客户端流量及性能
     video_animated_webp = models.ImageField(null=True, blank=True, verbose_name="视频前10秒的wep动图")
     # 封面的起始时间，决定webp从视频的哪里开始显示
-    cover_start_second = models.FloatField(null=True, blank=True, verbose_name="封面的起始时间")
-    # 封面的长度，决定webp的播放时间
-    cover_duration = models.FloatField(null=True, blank=True, verbose_name="封面的长度，决定webp的播放时间")
+    cover_start_second = models.FloatField(default=0, null=True, blank=True, verbose_name="封面的起始时间")
+    # 封面的长度，决定webp的播放时间, 默认5秒
+    cover_duration = models.FloatField(default=5, null=True, blank=True, verbose_name="封面的长度，决定webp的播放时间")
     # 视频上传的时间
     upload_time = models.DateTimeField(default=datetime.now, verbose_name="视频上传的时间")
-    # 视频首次添加时间
-    first_add_time = models.DateTimeField(default=datetime.now, verbose_name="视频首次添加时间")
+    # 视频首次在本地创建的时间
+    first_create_time = models.DateTimeField(default=datetime.now, verbose_name="视频首次在本地创建的时间")
     # 视频审核完成时间，此时间由服务端控制
     audit_completed_time = models.DateTimeField(blank=True, null=True, verbose_name="视频审核完成时间，此时间由服务端控制")
     # 视频观看次数
     view_num = models.PositiveIntegerField(default=0, verbose_name="视频观看次数")
     click_num = models.IntegerField(default=0, verbose_name="点击数", help_text="点击数")
-    users = models.ForeignKey(User, verbose_name='用户', on_delete=models.CASCADE)
+    # on_delete指定外键的删除 CASCADE
+    user = models.ForeignKey(User, related_name='Video', verbose_name='用户', on_delete=models.CASCADE)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='p', verbose_name='视频状态',)
-    location = models.ForeignKey(LocationItem, verbose_name='所在位置', on_delete=models.CASCADE, null=True, blank=True)
+
     content = models.CharField(max_length=200, unique=False, verbose_name="标题")
     category = models.ForeignKey(VideoCategory, verbose_name="video category", blank=True, null=True, on_delete=models.CASCADE)
     is_hot = models.BooleanField(default=False, verbose_name="是否hot")
 
     is_active = models.BooleanField(default=True, verbose_name="是否激活", help_text="是否激活")
     is_commentable = models.BooleanField(default=True, verbose_name="是否可评论", help_text="是否可评论")
+
+    # 经度
+    longitude = models.FloatField(null=False, blank=False, verbose_name="经度")
+    # 纬度
+    latitude = models.FloatField(null=False, blank=False, verbose_name="纬度")
+    poi_name = models.CharField(max_length=200, unique=False, null=False, blank=False, verbose_name="poi本地化名称")
+    poi_address = models.CharField(max_length=300, unique=False, null=False, blank=False, verbose_name='poi地址')
+
+    source = models.CharField(max_length=1, choices=VIDEO_SOURCE, default='c', verbose_name="视频来源")
+
     # browse_password = models.CharField(max_length=20, null=True, blank=True, verbose_name="浏览密码", help_text="浏览密码")
     # browse_password_encrypt = models.CharField(max_length=100, null=True, blank=True, verbose_name="浏览密码加密",
     #                                            help_text="浏览密码加密")
 
-    # def save(self, *args, **kwargs):
-    #     if self.browse_password and len(self.browse_password) > 0:
-    #         md5 = hashlib.md5()
-    #         md5.update(self.browse_password.encode('utf8'))
-    #         self.browse_password_encrypt = md5.hexdigest()
-    #     else:
-    #         self.browse_password_encrypt = None
-    #     super(Video, self).save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        # if self.browse_password and len(self.browse_password) > 0:
+        #     md5 = hashlib.md5()
+        #     md5.update(self.browse_password.encode('utf8'))
+        #     self.browse_password_encrypt = md5.hexdigest()
+        # else:
+        #     self.browse_password_encrypt = None
+
+
+        super(Video, self).save(*args, **kwargs)
+
+
     class Meta:
         verbose_name = '视频'
         verbose_name_plural = verbose_name
