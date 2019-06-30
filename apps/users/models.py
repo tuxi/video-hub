@@ -21,6 +21,10 @@ class UserProfile(AbstractUser):
     mobile = models.CharField(null=True, blank=True, max_length=11, verbose_name="手机号")
     # 邮箱
     email = models.EmailField(max_length=100, null=True, blank=True, verbose_name="邮箱")
+    avatar = models.ImageField(upload_to="user/avatar/image/%Y/%m", null=True, blank=True, verbose_name="头像",
+                               help_text="头像")
+    headbackground = models.ImageField(upload_to="user/headbackground/image/%Y/%m", null=True, blank=True, verbose_name="个人中心的头部背景",
+                               help_text="个人中心的头部背景")
 
     class Meta:
         verbose_name = '用户'
