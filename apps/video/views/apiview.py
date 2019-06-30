@@ -40,8 +40,8 @@ class VideoListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
     pagination_class = VideoPagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_class = VideoFilter
-    search_fields = ('content')
-    ordering_fields = ('audit_completed_time',)
+    search_fields = ('content', )
+    ordering_fields = ('audit_completed_time', 'click_num', 'view_num', )
     # 配置授权的认证方式为token，配置完成后未登录，无法访问此页面，否则会抛异常，列表页不需要配置
     # authentication_classes = (TokenAuthentication, )
 

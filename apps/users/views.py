@@ -24,7 +24,7 @@ class CustomBackend(ModelBackend):
     '''
     用于权限验证
     '''
-    def authenticate(self, request, username=None, password=None, **kwargs):
+    def authenticate(self, request, mobile=None, password=None, **kwargs):
         '''
         自定义用户验证
         :param request:
@@ -35,7 +35,7 @@ class CustomBackend(ModelBackend):
         '''
         try:
             # 通过username 或者 mobile 取出用户
-            user = User.objects.get(Q(username=username)|Q(mobile =username))
+            user = User.objects.get(Q(mobile=mobile)|Q(username=mobile))
             if user.check_password(password):
                 return user
         except Exception as e:
@@ -128,11 +128,17 @@ class UserViewSet(CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, viewse
         # 通过user 生成 token
         re_dict = serializer.data
         payload = jwt_payload_handler(user)
-        re_dict['token'] = jwt_encode_handler(payload)
-        re_dict['name'] = user.name if user.name else user.username
+        token = jwt_encode_handler(payload)
+        # re_dict['name'] = user.name if user.name else user.username
+
+        # 自定义创建用户成功时返回的数据结构
+        dict = {
+            'token': token,
+            'user': re_dict
+        }
 
         headers = self.get_success_headers(serializer.data)
-        return Response(re_dict, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(dict, status=status.HTTP_201_CREATED, headers=headers)
 
     def get_object(self):
         return self.request.user
@@ -150,10 +156,7 @@ def jwt_response_payload_handler(token, user=None, request=None):
    :return:
    """
    dict = {
-        "code":2000,
-        "data": {
-            "token": token,
-            'user': UserDetailSerializer(user, context={'request': request}).data
-        }
+       "token": token,
+       'user': UserDetailSerializer(user, context={'request': request}).data
    }
    return dict

@@ -107,7 +107,8 @@ class Video(models.Model):
         # else:
         #     self.browse_password_encrypt = None
 
-
+        if self.audit_completed_time == None:
+            self.audit_completed_time = datetime.now()
         super(Video, self).save(*args, **kwargs)
 
 

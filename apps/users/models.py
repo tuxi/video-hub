@@ -26,6 +26,8 @@ class UserProfile(AbstractUser):
     headbackground = models.ImageField(upload_to="user/headbackground/image/%Y/%m", null=True, blank=True, verbose_name="个人中心的头部背景",
                                help_text="个人中心的头部背景")
 
+    # jwt get_user_model().USERNAME_FIELD
+    USERNAME_FIELD = 'mobile'
     class Meta:
         verbose_name = '用户'
         verbose_name_plural = verbose_name
