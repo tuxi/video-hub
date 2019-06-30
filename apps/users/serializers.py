@@ -48,11 +48,11 @@ class UserDetailSerializer(serializers.ModelSerializer):
     '''
     class Meta:
         model = User
-        fields = ('name', 'gender', 'birthday', 'email', 'mobile')
+        fields = ('username', 'gender', 'birthday', 'email', 'mobile')
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     '''
-    用户注册序列化
+    用户注册序列化 并对这些字段的验证
     '''
     code = serializers.CharField(required=True, write_only=True, max_length=4, min_length=4, label="验证码",
                                  error_messages={
@@ -73,12 +73,12 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     # 在user的models中UserProfile的设置了mobile可以为null或blank，这里就不需要设置了
     # mobile = serializers.CharField(label='手机号', help_text='手机号', required=False)
 
-    # def create(self, validated_data):
-          # 重载父类方法，为了将密码以密文的方式保存到数据库
-    #     users = super(UserRegSerializer, self).create(validated_data=validated_data)
-    #     users.set_password(validated_data["password"])
-    #     users.save()
-    #     return users
+    def create(self, validated_data):
+          #重载父类方法，为了将密码以密文的方式保存到数据库
+        users = super(UserRegisterSerializer, self).create(validated_data=validated_data)
+        users.set_password(validated_data["password"])
+        users.save()
+        return users
 
     def validate_code(self, code):
         # try:

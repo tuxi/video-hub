@@ -182,21 +182,20 @@ REST_FRAMEWORK = {
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
+
 STATIC_URL = '/static/'
 # 部署的时候注释掉，不然无法执行collecstatic命令，运行时打开
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
-if DEBUG==True:
-    # 线下存储在本地，线上存储在七牛云
-    MEDIA_URL = "/media/"
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-else:
-    # 线上环境，从七牛云读取
-    DEFAULT_FILE_STORAGE = 'qiniustorage.backends.QiniuMediaStorage'
-    MEDIA_URL = 'https://static.kuwe.top/'
-    MEDIA_ROOT = ''
+# 部署时收集静态文件collecstatic需要的目录配置，部署完成后注释掉，不然debug下报错无法读取static下的文件
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_URL = "/media/"
+
+
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 #手机号码正则表达式
 REGEX_MOBILE = "^1[358]\d{9}$|^147\d{8}$|^176\d{8}$"
