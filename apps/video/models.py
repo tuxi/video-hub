@@ -15,44 +15,6 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-class VideoCategory(models.Model):
-    '''
-    video category
-    '''
-
-    CATEGORY_LEVEL = (
-        ("1", "一级类目"),
-        ("2", "二级类目"),
-        ("3", "三级类目")
-    )
-
-    name = models.CharField(max_length=30, default="", verbose_name="类别名", help_text="类别名")
-    category_type = models.CharField(max_length=30, choices=CATEGORY_LEVEL, verbose_name="路由编码", help_text="用于配置路由跳转")
-    desc = models.TextField(null=True, blank=True, verbose_name="类别描述", help_text="类别描述")
-    image = models.ImageField(upload_to="comment/category/image/%Y/%m", null=True, blank=True, help_text="图片")
-    category_level = models.CharField(max_length=20, choices=CATEGORY_LEVEL, verbose_name="类目级别", help_text="类目级别")
-    parent_category = models.ForeignKey("self", null=True, blank=True, verbose_name="父类目级别", help_text="父目录",
-                                        related_name="sub_category")
-    is_active = models.BooleanField(default=True, verbose_name="是否激活", help_text="是否激活")
-    is_tab = models.BooleanField(default=True, verbose_name="是否导航", help_text="是否导航")
-    index = models.IntegerField(default=0, verbose_name="排序", help_text="排序")
-    add_time = models.DateTimeField(auto_now_add=True, verbose_name="添加时间")
-
-    def save(self, *args, **kwargs):
-        # 为英文标题和简介提供默认值
-        # if not self.en_name:
-        #     self.en_name = self.name
-        # if not self.en_desc:
-        #     self.en_desc = self.desc
-        super(VideoCategory, self).save(*args, **kwargs)
-
-    class Meta:
-        verbose_name = "分类"
-        verbose_name_plural = verbose_name + '列表'
-
-    def __str__(self):
-        return '{0} - {1} - {2}'.format(self.name, self.get_category_type_display(), self.get_category_level_display())
-
 
 def upload_to(instance, filename):
     return 'media_items{filename}'.format(filename=filename)
@@ -118,7 +80,7 @@ class Video(models.Model):
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='p', verbose_name='视频状态',)
 
     content = models.CharField(max_length=200, unique=False, verbose_name="标题")
-    category = models.ForeignKey(VideoCategory, verbose_name="video category", blank=True, null=True, on_delete=models.CASCADE)
+    # tags = models.ManyToManyField(VideoTag, through="PostTag", through_fields=('post', 'tag'))
     is_hot = models.BooleanField(default=False, verbose_name="是否hot")
 
     is_active = models.BooleanField(default=True, verbose_name="是否激活", help_text="是否激活")

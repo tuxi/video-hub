@@ -6,40 +6,21 @@
 # @Software: PyCharm
 
 from rest_framework import serializers
-from .models import Video, VideoCategory, HotSearchWords
+from .models import Video, HotSearchWords
 import os
 from videokit.serializers import VideoField
 
 
-class CategorySerializer3(serializers.ModelSerializer):
-    class Meta:
-        model = VideoCategory
-        fields = '__all__'
-
-class CategorySerializer2(serializers.ModelSerializer):
-    sub_cat = CategorySerializer3(many=True)
-    class Meta:
-        model = VideoCategory
-        fields = '__all__'
-
-class CategorySerializer(serializers.ModelSerializer):
-    # sub_cat 为related_name 指定的， parent_category = models.ForeignKey("self", null=True, blank=True, verbose_name="父类级别", help_text="父类目", related_name="sub_cat")
-    sub_cat = CategorySerializer2(many=True)
-    class Meta:
-        model = VideoCategory
-        fields = '__all__'
-
-
-# 通过继承serializers.ModelSerializer 序列化，不用手动添加，可自动序列化全部字段，或者一部分字段
-class GoodsSerializer(serializers.ModelSerializer):
-    # 序列化时，如果存在ForeignKey这样的字段，比如category，默认序列化的是id，如果要序列化这个ForeignKey对于的model，则需要重载对应的字段，这样这个字段会根据其CategorySerializer嵌入到序列化中
-    category = CategorySerializer()
-    class Meta:
-        model = Video
-        # 序列化全部字段
-        fields = '__all__'
-        # 也可以设置部分需要序列化的字段
-        #fields = ('market_price', 'name')
+#
+# class TagSerializer(serializers.ModelSerializer):
+#     related_post_num = serializers.SerializerMethodField()
+#
+#     def get_related_post_num(self, tag):
+#         return len(VideoTag.objects.filter(tag__id=tag.id))
+#
+#     class Meta:
+#         model = VideoTag
+#         fields = ('name',  'related_post_num')
 
 
 class HotWordsSerializer(serializers.ModelSerializer):
@@ -61,6 +42,8 @@ class VideoCreateSerializer(serializers.ModelSerializer):
     '''
     创建视频序列化 并对这些字段的验证
     '''
+
+    # tags = TagSerializer(many=True)
 
     content = serializers.CharField(required=True, max_length=200, min_length=1, label="视频描述",
                                  error_messages={
@@ -87,9 +70,7 @@ class VideoCreateSerializer(serializers.ModelSerializer):
     poi_address = serializers.CharField(required=False, label="poi地址")
 
     first_create_time = serializers.DateTimeField(required=True, label="视频首次在本地创建的时间")
-
-    source = serializers.SerializerMethodField()
-
+    source = serializers.CharField(required=True, label="视频来源")
 
     def fix_video_file_name(self, video_file):
         '''
@@ -136,7 +117,7 @@ class VideoCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Video
         # 注册用户时需要post的字段
-        fields = ("content", "cover_duration", "cover_start_second", "video", "longitude", "latitude" , "poi_name", "poi_address", "first_create_time", "source")
+        fields = ("content", "cover_duration", "cover_start_second", "video", "longitude", "latitude" , "poi_name", "poi_address", "first_create_time", "source", )
 
 
 

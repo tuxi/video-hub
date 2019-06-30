@@ -11,14 +11,10 @@ from rest_framework.authentication import TokenAuthentication
 from video.filters import VideoFilter
 from django_filters.rest_framework import DjangoFilterBackend
 
-from video.models import Video, VideoCategory, HotSearchWords
-from video.serializers import GoodsSerializer, CategorySerializer, HotWordsSerializer
+from video.models import Video, HotSearchWords
+from video.serializers import VideoCreateSerializer, VideoDetailSerializer, HotWordsSerializer
 
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
-
-from video.serializers import VideoCreateSerializer, VideoDetailSerializer
-
-# Create your views here.
 
 
 # 自定义分页
@@ -39,7 +35,7 @@ class VideoListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
    视频列表页, 分页， 搜索， 过滤， 排序
     '''
     queryset = Video.objects.all()
-    serializer_class = GoodsSerializer
+    serializer_class = VideoDetailSerializer
     # 自定义分页
     pagination_class = VideoPagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
@@ -56,16 +52,6 @@ class VideoListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
-class CategoryViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
-    '''
-    list:
-        视频分类列表数据
-    retrieve:
-        获取视频分类详情
-    '''
-    # 继承mixins.RetrieveModelMixin后，就可以通过非id参数访问某个详情，连url都不需要配置了
-    queryset = VideoCategory.objects.filter(category_type=1)
-    serializer_class = CategorySerializer
 
 class HotSearchsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     '''
