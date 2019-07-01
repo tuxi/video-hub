@@ -74,6 +74,8 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         style={'input_type': 'password'}, help_text="密码", label="密码", write_only=True,
     )
 
+    email = serializers.EmailField(label="邮箱", help_text="邮箱", required=False)
+
     # 将mobile设置非必填，是为了适配前端在请求时只传入username，而未传入mobile时的问题，在本后端，username为mobile，mobile也是username，是唯一的
     # 在user的models中UserProfile的设置了mobile可以为null或blank，这里就不需要设置了
     # mobile = serializers.CharField(label='手机号', help_text='手机号', required=False)
@@ -113,15 +115,21 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         :param attrs:
         :return:
         '''
+
+        # 用户注册时未设置username和nickname时，自动为其生成
         username = attrs.get("username")
+        nickname = attrs.get("nickname")
         if username == None or len(username) == 0:
             username = generatingUserName()
+        if nickname == None or len(nickname) == 0:
+            nickname = 'skoyo'
         attrs["username"] = username
+        attrs['nickname'] = nickname
         del attrs["code"]
         return attrs
 
     class Meta:
         model = User
         # 注册用户时需要post的字段
-        fields = ("nickname", "username", "code", "mobile", "password", "avatar", "head_background", "summary", "website")
+        fields = ("nickname", "username", "code", "mobile", "password", "avatar", "head_background", "summary", "website", "email")
 
