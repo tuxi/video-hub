@@ -12,7 +12,7 @@ class UserProfile(AbstractUser):
     '''
 
     # 用户姓名，由于本用户系统是以手机号注册为基础的，所以在最初时用户姓名不需要填
-    nickname = models.CharField(max_length=30, null=True, blank=True, verbose_name="姓名")
+    nickname = models.CharField(max_length=30, null=True, blank=True, verbose_name="昵称")
     # 出生年月日
     birthday = models.DateField(null=True, blank=True, verbose_name="出生年月日")
     # 性别 默认为女
@@ -23,8 +23,11 @@ class UserProfile(AbstractUser):
     email = models.EmailField(max_length=100, null=True, blank=True, verbose_name="邮箱")
     avatar = models.ImageField(upload_to="user/avatar/image/%Y/%m", null=True, blank=True, verbose_name="头像",
                                help_text="头像")
-    headbackground = models.ImageField(upload_to="user/headbackground/image/%Y/%m", null=True, blank=True, verbose_name="个人中心的头部背景",
+    head_background = models.ImageField(upload_to="user/headbackground/image/%Y/%m", null=True, blank=True, verbose_name="个人中心的头部背景",
                                help_text="个人中心的头部背景")
+
+    website = models.URLField(blank=True, null=True, verbose_name="个人网站")
+    summary = models.CharField(max_length=300, null=True, blank=True, verbose_name='个人简介')
 
     # jwt get_user_model().USERNAME_FIELD
     USERNAME_FIELD = 'mobile'

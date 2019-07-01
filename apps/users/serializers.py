@@ -49,7 +49,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
     '''
     class Meta:
         model = User
-        fields = ('nickname', 'gender', 'birthday', 'email', 'mobile', 'avatar', 'headbackground')
+        fields = ('nickname', 'username' ,'gender', 'birthday', 'email', 'mobile', 'avatar', 'head_background', 'website', 'summary')
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     '''
@@ -69,7 +69,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
                                      validators=[UniqueValidator(queryset=User.objects.all(), message="手机号已经存在")])
 
     avatar = serializers.ImageField(label="头像", help_text="头像", required=False)
-    headbackground = serializers.ImageField(label="个人中心的头部背景", help_text="个人中心的头部背景", required=False)
+    head_background = serializers.ImageField(label="个人中心的头部背景", help_text="个人中心的头部背景", required=False)
     password = serializers.CharField(
         style={'input_type': 'password'}, help_text="密码", label="密码", write_only=True,
     )
@@ -123,5 +123,5 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         # 注册用户时需要post的字段
-        fields = ("nickname", "username", "code", "mobile", "password", "avatar", "headbackground")
+        fields = ("nickname", "username", "code", "mobile", "password", "avatar", "head_background", "summary", "website")
 

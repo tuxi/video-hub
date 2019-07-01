@@ -24,7 +24,7 @@ class CustomBackend(ModelBackend):
     '''
     用于权限验证
     '''
-    def authenticate(self, request, mobile=None, password=None, **kwargs):
+    def authenticate(self, request, mobile=None, username=None, password=None, **kwargs):
         '''
         自定义用户验证
         :param request:
@@ -33,13 +33,25 @@ class CustomBackend(ModelBackend):
         :param kwargs:
         :return:
         '''
-        try:
-            # 通过username 或者 mobile 取出用户
-            user = User.objects.get(Q(mobile=mobile)|Q(username=mobile))
-            if user.check_password(password):
-                return user
-        except Exception as e:
-            return None
+
+
+        user = None
+        # 通过username 或者 mobile 取出用户
+        # user = User.objects.get(Q(mobile=mobile) | Q(username=username))
+
+        if username != None:
+            try:
+                user = User.objects.get(Q(username=username))
+            except Exception as e:
+                pass
+        if mobile != None:
+            try:
+                user = User.objects.get(Q(mobile=mobile))
+            except Exception as e:
+                pass
+
+        if user != None and user.check_password(password):
+            return user
 
 class SmsCodeViewSet(CreateModelMixin, viewsets.GenericViewSet):
     '''
@@ -134,8 +146,8 @@ class UserViewSet(CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, viewse
         # 自定义创建用户成功时返回的数据结构
         dict = {
             'token': token,
-            'user': UserDetailSerializer(user, context={'request': request}).data
-            # 'user': re_dict
+            'user': UserDetailSerializer(user, context={'request': request}).data,
+            # 'user': re_dict,
         }
 
         headers = self.get_success_headers(serializer.data)
