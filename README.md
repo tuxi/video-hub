@@ -1,6 +1,9 @@
 # video-hub
 搭建一个短视频后台, 原项目[shortVideo](https://github.com/tuxi/shortvideo), 使用Django REST framework 编写 RESTful API, 优化服务新建的项目
 
+### 可测试的api
+http://39.105.79.94
+
 ### 平台
 - ubuntu 16.04
 - python3.6
