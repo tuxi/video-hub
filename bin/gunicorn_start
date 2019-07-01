@@ -1,0 +1,33 @@
+#!/bin/bash
+
+NAME="VideoHub" # 项目的名称
+DJANGODIR=/var/www/video-hub # 项目所在的目录
+SOCKFILE=/var/www/video-hub/run/gunicorn.sock # 启动gunicorn.sock使用UNIX套接字
+USER=root # the user to run as
+GROUP=root # the group to run as
+NUM_WORKERS=3 # how many worker processes should Gunicorn spawn
+DJANGO_SETTINGS_MODULE=BlogApi.settings # which settings file should Django use
+DJANGO_WSGI_MODULE=VideoHub.wsgi # WSGI module name
+
+echo "Starting $NAME as `whoami`"
+
+# 启动虚拟环境的路径
+cd $DJANGODIR
+source /home/parallels/.virtualenvs/videohub/bin/activate
+export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
+export PYTHONPATH=$DJANGODIR:$PYTHONPATH
+
+# Create the run directory if it doesn't exist
+RUNDIR=$(dirname $SOCKFILE)
+test -d $RUNDIR || mkdir -p $RUNDIR
+
+# Start your Django Unicorn
+# gunicorn 安装在虚拟环境下的完整路径
+exec /home/parallels/.virtualenvs/videohub/bin/gunicorn ${DJANGO_WSGI_MODULE}:application \
+--name $NAME \
+--workers $NUM_WORKERS \
+--user=$USER --group=$GROUP \
+--bind=unix:$SOCKFILE \
+--log-level=debug \
+--log-file=-
+
