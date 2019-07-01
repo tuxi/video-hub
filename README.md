@@ -19,13 +19,33 @@ pip install -r requirements.txt
 create database videohub charset=utf8;
 ```
 - 生成数据库
+```
+# 1. 创建更改的文件
 python manage.py makemigrations
+# 2. 将生成的py文件应用到数据库
 python manage.py migrate
+```
+
+- 创建管理员
+```
+python manage.py createsuperuser
+```
 
 - 收集静态文件
 ```
 python manage.py collectstatic --noinput
 ```
+
+- 运行项目
+```
+python manage.py runserver 8000
+```
+
+- 清空数据库
+```
+python manage.py flush
+```
+此命令会询问是 `yes` 还是 `no`, 选择 `yes` 会把数据全部清空掉，只留下空表。
 
 ### 问题
 
