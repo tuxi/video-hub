@@ -55,6 +55,7 @@ EXTRA_APPS = [
     'rest_framework',
     'corsheaders', # 跨域访问 解决
     'rest_framework.authtoken',  # 用户登录
+    'gunicorn',
 ]
 
 PERSONAL_APPS = [
