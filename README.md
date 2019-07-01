@@ -4,15 +4,28 @@
 
 ### 初始化
 
-- 创建数据库
-```angular2html
-create database videohub charset=utf8;
-```
 - 创建python虚拟环境
 ```angular2html
 mkvirtualenv -p /usr/bin/python3 videohub
 ```
 
+- 安装依赖
+```
+pip install -r requirements.txt
+```
+
+- 创建数据库
+```angular2html
+create database videohub charset=utf8;
+```
+- 生成数据库
+python manage.py makemigrations
+python manage.py migrate
+
+- 收集静态文件
+```
+python manage.py collectstatic --noinput
+```
 
 ### 问题
 

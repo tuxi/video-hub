@@ -49,6 +49,7 @@ urlpatterns = [
     url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
     url(r'^', include(router.urls)),
 
+    url(r'^static/(?P<path>.*)$', serve, {'document_root': STATICFILES_DIRS[0]}, name='static'),
     # drf自带的认证方式
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     # jwt的认证方式

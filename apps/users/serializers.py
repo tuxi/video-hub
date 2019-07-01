@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth import get_user_model
+from utils.utils import generatingUserName
 
 from .models import VerifyCode
 
@@ -48,7 +49,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
     '''
     class Meta:
         model = User
-        fields = ('username', 'gender', 'birthday', 'email', 'mobile', 'avatar', 'headbackground')
+        fields = ('nickname', 'gender', 'birthday', 'email', 'mobile', 'avatar', 'headbackground')
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     '''
@@ -62,8 +63,8 @@ class UserRegisterSerializer(serializers.ModelSerializer):
                                      "min_length": "验证码格式错误"
                                  },
                                  help_text="验证码")
-    # username = serializers.CharField(label="用户名", help_text="用户名", required=True, allow_blank=False,
-    #                                  validators=[UniqueValidator(queryset=User.objects.all(), message="用户已经存在")])
+    username = serializers.CharField(label="用户名", help_text="用户名, 如果不设置会自动生成", required=False, allow_blank=True,
+                                     validators=[UniqueValidator(queryset=User.objects.all(), message="用户已经存在")])
     mobile = serializers.CharField(label="手机号", help_text="手机号", required=True, allow_blank=False,
                                      validators=[UniqueValidator(queryset=User.objects.all(), message="手机号已经存在")])
 
@@ -112,13 +113,15 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         :param attrs:
         :return:
         '''
-        if "mobile" not in attrs:
-            attrs["mobile"] = attrs["username"]
+        username = attrs.get("username")
+        if username == None or len(username) == 0:
+            username = generatingUserName()
+        attrs["username"] = username
         del attrs["code"]
         return attrs
 
     class Meta:
         model = User
         # 注册用户时需要post的字段
-        fields = ("username", "code", "mobile", "password", "avatar", "headbackground")
+        fields = ("nickname", "username", "code", "mobile", "password", "avatar", "headbackground")
 

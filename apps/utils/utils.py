@@ -16,3 +16,5 @@ def create_md5():
     return hash
 
 
+def generatingUserName():
+    return "alpface" + create_md5()

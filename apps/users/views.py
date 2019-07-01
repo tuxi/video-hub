@@ -28,7 +28,7 @@ class CustomBackend(ModelBackend):
         '''
         自定义用户验证
         :param request:
-        :param username:
+        :param mobile:
         :param password:
         :param kwargs:
         :return:
@@ -134,7 +134,8 @@ class UserViewSet(CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, viewse
         # 自定义创建用户成功时返回的数据结构
         dict = {
             'token': token,
-            'user': re_dict
+            'user': UserDetailSerializer(user, context={'request': request}).data
+            # 'user': re_dict
         }
 
         headers = self.get_success_headers(serializer.data)

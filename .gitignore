@@ -101,8 +101,8 @@ ENV/
 .mypy_cache/
 .idea/
 
-media/
-static/
+# media/
+#static/
 
 # 忽略所有app目录下的migrations目录中除了__init__.py的所有文件，防止数据库生成的文件被提交
 # 忽略migrations目录

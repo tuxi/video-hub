@@ -12,13 +12,13 @@ class UserProfile(AbstractUser):
     '''
 
     # 用户姓名，由于本用户系统是以手机号注册为基础的，所以在最初时用户姓名不需要填
-    name = models.CharField(max_length=30, null=True, blank=True, verbose_name="姓名")
+    nickname = models.CharField(max_length=30, null=True, blank=True, verbose_name="姓名")
     # 出生年月日
     birthday = models.DateField(null=True, blank=True, verbose_name="出生年月日")
     # 性别 默认为女
     gender = models.CharField(max_length=6, choices=(('male', u'男'), ('female', u'女')), default='famle')
     # 手机号
-    mobile = models.CharField(null=True, blank=True, max_length=11, verbose_name="手机号")
+    mobile = models.CharField(unique=True, max_length=11, verbose_name="手机号")
     # 邮箱
     email = models.EmailField(max_length=100, null=True, blank=True, verbose_name="邮箱")
     avatar = models.ImageField(upload_to="user/avatar/image/%Y/%m", null=True, blank=True, verbose_name="头像",
@@ -28,6 +28,8 @@ class UserProfile(AbstractUser):
 
     # jwt get_user_model().USERNAME_FIELD
     USERNAME_FIELD = 'mobile'
+    # 如果自定义了用户名USERNAME_FIELD的字段，那么必须要包含这两个字段
+    REQUIRED_FIELDS = ('nickname', 'username', 'email')
     class Meta:
         verbose_name = '用户'
         verbose_name_plural = verbose_name

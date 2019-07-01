@@ -32,7 +32,7 @@ SECRET_KEY = '_x-$8!ku_q!shjw5^p1)k#mbe0%_q=u3vhw2a=y8lh%$q#ov*4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['10.211.55.4', '127.0.0.1']
+ALLOWED_HOSTS = ['10.211.55.4', '127.0.0.1', '10.211.55.3']
 
 AUTH_USER_MODEL = 'users.UserProfile'
 
