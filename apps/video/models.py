@@ -111,7 +111,6 @@ class Video(models.Model):
             self.audit_completed_time = datetime.now()
         super(Video, self).save(*args, **kwargs)
 
-
     class Meta:
         verbose_name = '视频'
         verbose_name_plural = verbose_name

@@ -9,7 +9,7 @@ from rest_framework import serializers
 from .models import Video, HotSearchWords
 import os
 from videokit.serializers import VideoField
-
+from users.serializers import UserDetailSerializer
 
 #
 # class TagSerializer(serializers.ModelSerializer):
@@ -33,9 +33,14 @@ class VideoDetailSerializer(serializers.ModelSerializer):
     '''
     视频详情序列化
     '''
+
+    # 序列化时，如果存在ForeignKey这样的字段，比如user，默认序列化的是id，如果要序列化这个ForeignKey对于的model，则需要重载对应的字段，这样这个字段会根据其UserDetailSerializer嵌入到序列化中
+    user = UserDetailSerializer()
     class Meta:
         model = Video
         fields = '__all__'
+
+
 
 
 class VideoCreateSerializer(serializers.ModelSerializer):
