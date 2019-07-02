@@ -123,6 +123,12 @@ class UserViewSet(CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, viewse
 
         return UserDetailSerializer
 
+    def retrieve(self, request, *args, **kwargs):
+        super(UserViewSet, self).retrieve(request=request)
+
+    def get_authenticators(self):
+        return super(UserViewSet, self).get_authenticators()
+
 
 
     def get_permissions(self):

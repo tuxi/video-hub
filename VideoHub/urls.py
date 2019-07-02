@@ -26,26 +26,26 @@ from VideoHub.settings import MEDIA_ROOT, STATICFILES_DIRS
 import xadmin
 
 from users.views import SmsCodeViewSet, UserViewSet
-from video.views.apiview import VideoListViewSet, HotSearchsViewSet
+from video.views.apiview import VideotViewSet, HotSearchsViewSet
 from user_operation.views import UserFavoriteViewSet
 
 # 通过router绑定url
 router = DefaultRouter()
 # 配置videos url
-router.register(r'videos', VideoListViewSet, base_name="videos")
+router.register(r'videos', VideotViewSet, base_name="videos")
 
 # 验证码
 router.register(r'code', SmsCodeViewSet, base_name='code')
 # 热门搜索
 router.register(r'hotsearchs', HotSearchsViewSet, base_name='hotsearchs')
 # 用户
-router.register(r'users', UserViewSet, 'users')
+router.register(r'users', UserViewSet, base_name='users')
 # 收藏
-router.register(r'userfavorite', UserFavoriteViewSet, base_name='userfavorite')
+router.register(r'favorites', UserFavoriteViewSet, base_name='favorites')
 
-video_list = VideoListViewSet.as_view({
-    'get': 'list',
-})
+# video_list = VideoListViewSet.as_view({
+#     'get': 'list',
+# })
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),

@@ -4,9 +4,8 @@ from rest_framework.response import Response
 from rest_framework import authentication, permissions
 
 from rest_framework import mixins, filters
-from rest_framework import generics, viewsets
+from rest_framework import generics, viewsets, authentication
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.authentication import SessionAuthentication
 
 from video.filters import VideoFilter
 from django_filters.rest_framework import DjangoFilterBackend
@@ -31,7 +30,7 @@ class VideoPagination(PageNumberPagination):
     max_page_size = 100
 
 
-class VideoListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
+class VideotViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     '''
     retrieve:
         根据id获取视频详情
@@ -52,8 +51,7 @@ class VideoListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
     search_fields = ('content', )
     ordering_fields = ('audit_completed_time', 'click_num', 'view_num', )
     # 单独在此视图中配置访问权限, 必须登录才能访问，如果登录了，将登录的用户和登录的令牌存在request中
-    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
-    permissions = (IsOwnerOrReadOnly, )
+    authentication_classes = (JSONWebTokenAuthentication, authentication.SessionAuthentication)
 
     def retrieve(self, request, *args, **kwargs):
         # 查看详情时，点击数加1
@@ -73,11 +71,18 @@ class VideoListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
     #     return [auth() for auth in self.authentication_classes]
     #
     #
-    # def get_authenticators(self):
-    #
-    #     if self.request.method == 'POST' or self.request.method == 'PUT':
-    #         self.authentication_classes.append(JSONWebTokenAuthentication)
-    #     return [auth() for auth in self.authentication_classes]
+    def get_authenticators(self):
+        return super(VideotViewSet, self).get_authenticators()
+
+    def get_permissions(self):
+        if self.action == 'retrieve':
+            return []
+        elif self.action == 'create':
+            # 如果创建视频必须要有权限才可以
+            return [permissions.IsAuthenticated()]
+        elif self.action == "destory":
+            return [permissions.IsAuthenticated()]
+        return []
 
 
     def get_serializer_class(self):
@@ -89,7 +94,7 @@ class VideoListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
         return VideoDetailSerializer
 
     def destroy(self, request, *args, **kwargs):
-        return super(VideoListViewSet, self).destroy(request)
+        return super(VideotViewSet, self).destroy(request)
 
 class HotSearchsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     '''
