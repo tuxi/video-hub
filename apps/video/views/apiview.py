@@ -6,7 +6,7 @@ from rest_framework import authentication, permissions
 from rest_framework import mixins, filters
 from rest_framework import generics, viewsets
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.authentication import TokenAuthentication
+from rest_framework.authentication import SessionAuthentication
 
 from video.filters import VideoFilter
 from django_filters.rest_framework import DjangoFilterBackend
@@ -52,7 +52,7 @@ class VideoListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.
     search_fields = ('content', )
     ordering_fields = ('audit_completed_time', 'click_num', 'view_num', )
     # 单独在此视图中配置访问权限, 必须登录才能访问，如果登录了，将登录的用户和登录的令牌存在request中
-    authentication_classes = (JSONWebTokenAuthentication, TokenAuthentication)
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
     permissions = (IsOwnerOrReadOnly, )
 
     def retrieve(self, request, *args, **kwargs):

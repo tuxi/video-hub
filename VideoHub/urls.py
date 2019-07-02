@@ -27,6 +27,7 @@ import xadmin
 
 from users.views import SmsCodeViewSet, UserViewSet
 from video.views.apiview import VideoListViewSet, HotSearchsViewSet
+from user_operation.views import UserFavoriteViewSet
 
 # 通过router绑定url
 router = DefaultRouter()
@@ -39,6 +40,8 @@ router.register(r'code', SmsCodeViewSet, base_name='code')
 router.register(r'hotsearchs', HotSearchsViewSet, base_name='hotsearchs')
 # 用户
 router.register(r'users', UserViewSet, 'users')
+# 收藏
+router.register(r'userfavorite', UserFavoriteViewSet, base_name='userfavorite')
 
 video_list = VideoListViewSet.as_view({
     'get': 'list',

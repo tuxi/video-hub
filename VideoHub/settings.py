@@ -61,6 +61,7 @@ EXTRA_APPS = [
 PERSONAL_APPS = [
     'video.apps.VideoConfig',
     'users.apps.UsersConfig',
+    'user_operation.apps.UserOperationConfig'
 ]
 
 INSTALLED_APPS += PERSONAL_APPS + EXTRA_APPS
