@@ -15,6 +15,7 @@ from video.models import Video, HotSearchWords
 from video.serializers import VideoCreateSerializer, VideoDetailSerializer, HotWordsSerializer
 
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+from utils.permissions import IsOwnerOrReadOnly
 
 
 # 自定义分页
@@ -30,9 +31,17 @@ class VideoPagination(PageNumberPagination):
     max_page_size = 100
 
 
-class VideoListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class VideoListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
     '''
-   视频列表页, 分页， 搜索， 过滤， 排序
+    retrieve:
+        根据id获取视频详情
+    create:
+        创建视频
+    list:
+        视频列表页, 分页， 搜索， 过滤， 排序
+    destory:
+        根据id删除视频
+
     '''
     queryset = Video.objects.all()
     serializer_class = VideoDetailSerializer
@@ -42,10 +51,12 @@ class VideoListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
     filter_class = VideoFilter
     search_fields = ('content', )
     ordering_fields = ('audit_completed_time', 'click_num', 'view_num', )
-    # 配置授权的认证方式为token，配置完成后未登录，无法访问此页面，否则会抛异常，列表页不需要配置
-    # authentication_classes = (TokenAuthentication, )
+    # 单独在此视图中配置访问权限, 必须登录才能访问，如果登录了，将登录的用户和登录的令牌存在request中
+    authentication_classes = (JSONWebTokenAuthentication, TokenAuthentication)
+    permissions = (IsOwnerOrReadOnly, )
 
     def retrieve(self, request, *args, **kwargs):
+        # 查看详情时，点击数加1
         instance = self.get_object()
         instance.click_num += 1
         instance.save()
@@ -53,23 +64,21 @@ class VideoListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewset
         return Response(serializer.data)
 
 
-class HotSearchsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    '''
-    获取热门搜索词列表
-    '''
-    queryset = HotSearchWords.objects.all().order_by('-index')
-    serializer_class = HotWordsSerializer
 
-class VideoViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
-    '''
-    retrieve:
-        获取视频详情
-    create:
-        创建视频
-    '''
-    queryset = Video.objects.all()
+    # 动态加载权限验证
+    # def get_permissions(self):
+    #
+    #     if self.request.method == 'POST' or self.request.method == 'PUT':
+    #         self.permission_classes.append(IsOwnerOrReadOnly)
+    #     return [auth() for auth in self.authentication_classes]
+    #
+    #
+    # def get_authenticators(self):
+    #
+    #     if self.request.method == 'POST' or self.request.method == 'PUT':
+    #         self.authentication_classes.append(JSONWebTokenAuthentication)
+    #     return [auth() for auth in self.authentication_classes]
 
-    authentication_classes = (JSONWebTokenAuthentication, authentication.SessionAuthentication)
 
     def get_serializer_class(self):
         if self.action == "retrieve":
@@ -78,3 +87,13 @@ class VideoViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, viewsets.
             return VideoCreateSerializer
 
         return VideoDetailSerializer
+
+    def destroy(self, request, *args, **kwargs):
+        return super(VideoListViewSet, self).destroy(request)
+
+class HotSearchsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    '''
+    获取热门搜索词列表
+    '''
+    queryset = HotSearchWords.objects.all().order_by('-index')
+    serializer_class = HotWordsSerializer

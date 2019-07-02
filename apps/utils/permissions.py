@@ -7,6 +7,9 @@
 # 权限设置
 
 from rest_framework import permissions
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
     """
@@ -22,3 +25,12 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 
         # Instance must have an attribute named `owner`.
         return obj.user == request.user
+
+    def has_permission(self, request, view):
+        try:
+            user = request.user
+            if isinstance(user, User):
+                return True
+        except Exception as e:
+            print(e)
+            return False
