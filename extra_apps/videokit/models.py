@@ -336,8 +336,8 @@ class VideoField(models.FileField):
             return
 
         if file:
-            cover_duration = file.cover_duration
-            cover_start_second = file.cover_start_second
+            cover_duration = instance.cover_duration
+            cover_start_second = instance.cover_start_second
         else:
             cover_duration = None
             cover_start_second = None
