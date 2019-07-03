@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework_jwt.serializers import jwt_encode_handler, jwt_payload_handler
 
-from .serializers import SmsSerializer, UserRegisterSerializer, UserDetailSerializer
+from .serializers import SmsSerializer, UserRegisterSerializer, UserDetailSerializer, UserUpdateSerializer
 from utils.yunpian import YunPian
 from VideoHub.settings import YUNPIAN_APIKEY
 from .models import VerifyCode
@@ -120,8 +120,12 @@ class UserViewSet(CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, viewse
             return UserDetailSerializer
         elif self.action == "create":
             return UserRegisterSerializer
+        elif self.action == 'update' or self.action == 'partial_update':
+            # 部分更新
+            return UserUpdateSerializer
 
         return UserDetailSerializer
+
 
     def retrieve(self, request, *args, **kwargs):
         super(UserViewSet, self).retrieve(request=request)
@@ -132,10 +136,13 @@ class UserViewSet(CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, viewse
 
 
     def get_permissions(self):
+        # 动态加载权限验证
         if self.action == 'retrieve':
             return [permissions.IsAuthenticated()]
         elif self.action == 'create':
             return []
+        elif self.action == 'update' or self.action == 'partial_update':
+            return [permissions.IsAuthenticated()]
         return []
 
     def create(self, request, *args, **kwargs):

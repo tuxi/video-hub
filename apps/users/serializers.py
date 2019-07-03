@@ -49,6 +49,14 @@ class UserDetailSerializer(serializers.ModelSerializer):
     '''
     class Meta:
         model = User
+        fields = ( 'id', 'nickname', 'username' ,'gender', 'birthday', 'email', 'mobile', 'avatar', 'head_background', 'website', 'summary')
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    '''
+    修改用户的序列化
+    '''
+    class Meta:
+        model = User
         fields = ('nickname', 'username' ,'gender', 'birthday', 'email', 'mobile', 'avatar', 'head_background', 'website', 'summary')
 
 class UserRegisterSerializer(serializers.ModelSerializer):
