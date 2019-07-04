@@ -75,8 +75,8 @@ class Video(models.Model):
     # 视频观看次数
     view_num = models.PositiveIntegerField(default=0, verbose_name="视频观看次数")
     click_num = models.IntegerField(default=0, verbose_name="点击数", help_text="点击数")
-    # on_delete指定外键的删除 CASCADE
-    user = models.ForeignKey(User, related_name='Video', verbose_name='用户', on_delete=models.CASCADE)
+    # on_delete指定外键的删除 CASCADE, related_name 给这个外键定义好一个别的名称
+    user = models.ForeignKey(User, related_name='videos', verbose_name='用户', on_delete=models.CASCADE)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='p', verbose_name='视频状态',)
 
     content = models.CharField(max_length=200, unique=False, verbose_name="标题")

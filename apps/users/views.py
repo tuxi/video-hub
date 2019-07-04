@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.backends import ModelBackend
 from django.db.models import Q
 
-from rest_framework.mixins import CreateModelMixin, UpdateModelMixin, RetrieveModelMixin
+from rest_framework.mixins import CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, ListModelMixin
 from rest_framework import viewsets, permissions, status, authentication
 from rest_framework.response import Response
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
@@ -128,7 +128,7 @@ class UserViewSet(CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, viewse
 
 
     def retrieve(self, request, *args, **kwargs):
-        super(UserViewSet, self).retrieve(request=request)
+        return super(UserViewSet, self).retrieve(request=request)
 
     def get_authenticators(self):
         return super(UserViewSet, self).get_authenticators()
@@ -187,6 +187,8 @@ class UserViewSet(CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, viewse
     def perform_create(self, serializer):
         # 重载此方法 返回user
         return serializer.save()
+
+
 
 def jwt_response_payload_handler(token, user=None, request=None):
    """

@@ -10,6 +10,9 @@ from .models import Video, HotSearchWords
 import os
 from videokit.serializers import VideoField
 from users.serializers import UserDetailSerializer
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 #
 # class TagSerializer(serializers.ModelSerializer):
@@ -104,10 +107,11 @@ class VideoCreateSerializer(serializers.ModelSerializer):
         '''
         # 请求的用户
         user = self.context['request'].user
+
         # 请求的参数username
         user_id = user.id
-        if user_id == None:
-            user_id = 1
+        # if user_id == None:
+        #     user_id = 1
         validated_data["user_id"] = user_id
 
         self.fix_video_file_name(validated_data["video"])
@@ -125,4 +129,19 @@ class VideoCreateSerializer(serializers.ModelSerializer):
         fields = ("content", "cover_duration", "cover_start_second", "video", "longitude", "latitude" , "poi_name", "poi_address", "first_create_time", "source", )
 
 
+class VideoDetailNoUserSerializer(serializers.ModelSerializer):
+    '''
+    视频详情序列化, 此序列化不会序列化视频的发布者
+    '''
+    class Meta:
+        model = Video
+        fields = '__all__'
 
+class UserPublishedListSerializer(serializers.ModelSerializer):
+    videos = VideoDetailNoUserSerializer(many=True)
+
+    class Meta:
+        model = User
+        fields = (
+        'id', 'nickname', 'username', 'gender', 'birthday', 'email', 'mobile', 'avatar', 'head_background', 'website',
+        'summary', 'videos')

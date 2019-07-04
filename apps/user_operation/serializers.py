@@ -7,6 +7,7 @@
 
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
+from django.contrib.auth import get_user_model
 
 from .models import UserFavorite
 from video.serializers import VideoDetailSerializer

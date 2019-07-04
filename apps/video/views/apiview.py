@@ -1,33 +1,19 @@
-from django.shortcuts import render
-from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import authentication, permissions
-
+from rest_framework import permissions
 from rest_framework import mixins, filters
-from rest_framework import generics, viewsets, authentication
-from rest_framework.pagination import PageNumberPagination
+from rest_framework import viewsets, authentication
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+
+from django_filters.rest_framework import DjangoFilterBackend
+from django.contrib.auth import get_user_model
 
 from video.filters import VideoFilter
-from django_filters.rest_framework import DjangoFilterBackend
-
 from video.models import Video, HotSearchWords
 from video.serializers import VideoCreateSerializer, VideoDetailSerializer, HotWordsSerializer
+from utils.utils import CustomPagination
+from video.serializers import UserPublishedListSerializer
 
-from rest_framework_jwt.authentication import JSONWebTokenAuthentication
-from utils.permissions import IsOwnerOrReadOnly
-
-
-# 自定义分页
-class VideoPagination(PageNumberPagination):
-    # 每页的数量
-    page_size = 12
-    # 客户端可以使用此查询参数控制页面。
-    page_query_param = 'page'
-    # 客户端可以使用此查询参数控制页面大小。
-    page_size_query_param = 'page_size'
-
-    # 置为整数以限制客户端可能请求的最大页面大小。
-    max_page_size = 100
+User = get_user_model()
 
 
 class VideotViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet):
@@ -45,7 +31,7 @@ class VideotViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Retri
     queryset = Video.objects.all()
     serializer_class = VideoDetailSerializer
     # 自定义分页
-    pagination_class = VideoPagination
+    pagination_class = CustomPagination
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_class = VideoFilter
     search_fields = ('content', )
@@ -102,3 +88,14 @@ class HotSearchsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     '''
     queryset = HotSearchWords.objects.all().order_by('-index')
     serializer_class = HotWordsSerializer
+
+class UserPublishedListViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin):
+    '''
+    list:
+        用于获取用户发布的动态内容列表
+    '''
+    queryset = User.objects.filter(is_active=True)
+    serializer_class = UserPublishedListSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        return super(UserPublishedListViewSet, self).retrieve(request=request)

@@ -6,17 +6,20 @@
 # @Software: PyCharm
 
 from rest_framework import mixins
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.authentication import SessionAuthentication
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.response import Response
+from django.contrib.auth import get_user_model
 
 from utils.permissions import IsOwnerOrReadOnly
 from .models import UserFavorite
 from .serializers import UserFavoriteDetailSerializer, UserFavoriteSerializer
 
-# Create your views here.
 
+User = get_user_model()
 
 class UserFavoriteViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     '''
