@@ -12,16 +12,16 @@ from django.dispatch import receiver
 from user_operation.models import UserFavorite
 
 
-@receiver(post_save, sender=UserFavorite)
-def create_userfav(sender, instance=None, created=False, **kwargs):
-    if created:
-        goods = instance.goods
-        goods.fav_num += 1
-        goods.save()
-
-
-@receiver(post_delete, sender=UserFavorite)
-def delete_userfav(sender, instance=None, created=False, **kwargs):
-    goods = instance.goods
-    goods.fav_num -= 1
-    goods.save()
+# @receiver(post_save, sender=UserFavorite)
+# def create_userfav(sender, instance=None, created=False, **kwargs):
+#     if created:
+#         video = instance.video
+#         video.fav_num += 1
+#         video.save()
+#
+#
+# @receiver(post_delete, sender=UserFavorite)
+# def delete_userfav(sender, instance=None, created=False, **kwargs):
+#     video = instance.goods
+#     video.fav_num -= 1
+#     video.save()

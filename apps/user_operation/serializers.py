@@ -10,7 +10,9 @@ from rest_framework.validators import UniqueTogetherValidator
 from django.contrib.auth import get_user_model
 
 from .models import UserFavorite
-from video.serializers import VideoDetailSerializer
+from video.serializers import VideoDetailNoUserSerializer
+
+User = get_user_model()
 
 
 class UserFavoriteSerializer(serializers.ModelSerializer):
@@ -36,9 +38,17 @@ class UserFavoriteSerializer(serializers.ModelSerializer):
 
 class UserFavoriteDetailSerializer(serializers.ModelSerializer):
     # 序列化video
-    video = VideoDetailSerializer()
+    video = VideoDetailNoUserSerializer(many=True)
 
     class Meta:
         model = UserFavorite
         # 将序列化的video放到收藏详情字段中
         fields = ("video", "id")
+
+class UserPublishedListSerializer(serializers.ModelSerializer):
+    videos = VideoDetailNoUserSerializer(many=True)
+    class Meta:
+        model = User
+        fields = (
+        'id', 'nickname', 'username', 'gender', 'birthday', 'email', 'mobile', 'avatar', 'head_background', 'website',
+        'summary', 'videos')

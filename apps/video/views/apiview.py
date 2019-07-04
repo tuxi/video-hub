@@ -11,7 +11,6 @@ from video.filters import VideoFilter
 from video.models import Video, HotSearchWords
 from video.serializers import VideoCreateSerializer, VideoDetailSerializer, HotWordsSerializer
 from utils.utils import CustomPagination
-from video.serializers import UserPublishedListSerializer
 
 User = get_user_model()
 
@@ -88,14 +87,3 @@ class HotSearchsViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     '''
     queryset = HotSearchWords.objects.all().order_by('-index')
     serializer_class = HotWordsSerializer
-
-class UserPublishedListViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin):
-    '''
-    list:
-        用于获取用户发布的动态内容列表
-    '''
-    queryset = User.objects.filter(is_active=True)
-    serializer_class = UserPublishedListSerializer
-
-    def retrieve(self, request, *args, **kwargs):
-        return super(UserPublishedListViewSet, self).retrieve(request=request)

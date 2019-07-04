@@ -128,7 +128,6 @@ class VideoCreateSerializer(serializers.ModelSerializer):
         # 注册用户时需要post的字段
         fields = ("content", "cover_duration", "cover_start_second", "video", "longitude", "latitude" , "poi_name", "poi_address", "first_create_time", "source", )
 
-
 class VideoDetailNoUserSerializer(serializers.ModelSerializer):
     '''
     视频详情序列化, 此序列化不会序列化视频的发布者
@@ -136,12 +135,3 @@ class VideoDetailNoUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Video
         fields = '__all__'
-
-class UserPublishedListSerializer(serializers.ModelSerializer):
-    videos = VideoDetailNoUserSerializer(many=True)
-
-    class Meta:
-        model = User
-        fields = (
-        'id', 'nickname', 'username', 'gender', 'birthday', 'email', 'mobile', 'avatar', 'head_background', 'website',
-        'summary', 'videos')

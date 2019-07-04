@@ -26,8 +26,8 @@ from VideoHub.settings import MEDIA_ROOT, STATICFILES_DIRS
 import xadmin
 
 from users.views import SmsCodeViewSet, UserViewSet
-from video.views.apiview import VideotViewSet, HotSearchsViewSet, UserPublishedListViewSet
-from user_operation.views import UserFavoriteViewSet
+from video.views.apiview import VideotViewSet, HotSearchsViewSet
+from user_operation.views import UserFavoriteViewSet, UserPublishedListViewSet
 
 # 通过router绑定url
 router = DefaultRouter()

@@ -17,7 +17,7 @@ from django.contrib.auth import get_user_model
 from utils.permissions import IsOwnerOrReadOnly
 from .models import UserFavorite
 from .serializers import UserFavoriteDetailSerializer, UserFavoriteSerializer
-
+from .serializers import UserPublishedListSerializer
 
 User = get_user_model()
 
@@ -48,3 +48,13 @@ class UserFavoriteViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, mix
             return UserFavoriteSerializer
         return UserFavoriteSerializer
 
+class UserPublishedListViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin):
+    '''
+    list:
+        用于获取用户发布的动态内容列表
+    '''
+    queryset = User.objects.filter(is_active=True)
+    serializer_class = UserPublishedListSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        return super(UserPublishedListViewSet, self).retrieve(request=request)

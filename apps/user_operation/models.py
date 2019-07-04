@@ -17,8 +17,8 @@ class UserFavorite(models.Model):
     """
     用户收藏
     """
-    user = models.ForeignKey(User, verbose_name="用户")
-    video = models.ForeignKey(Video, verbose_name="视频", help_text="视频id")
+    user = models.ForeignKey(User, verbose_name="用户", related_name="favorites")
+    video = models.ForeignKey(Video, verbose_name="视频", related_name="videos", help_text="视频id")
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u"添加时间")
 
     class Meta:
