@@ -151,7 +151,7 @@ class UserViewSet(CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, viewse
         user = self.perform_create(serializer)
 
         # 通过user 生成 token
-        re_dict = serializer.data
+        # re_dict = serializer.data
         payload = jwt_payload_handler(user)
         token = jwt_encode_handler(payload)
         # re_dict['name'] = user.name if user.name else user.username
@@ -177,8 +177,9 @@ class UserViewSet(CreateModelMixin, UpdateModelMixin, RetrieveModelMixin, viewse
             # If 'prefetch_related' has been applied to a queryset, we need to
             # forcibly invalidate the prefetch cache on the instance.
             instance._prefetched_objects_cache = {}
-
-        return Response(serializer.data)
+        # 修改完用户信息后返回完整的用户序列化数据
+        dict = UserDetailSerializer(instance, context={'request': request}).data
+        return Response(dict)
 
     def get_object(self):
         return self.request.user
