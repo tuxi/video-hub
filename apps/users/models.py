@@ -40,6 +40,10 @@ class UserProfile(AbstractUser):
     def __str__(self):
         return self.username
 
+    def save(self, *args, **kwargs):
+
+        super(UserProfile, self).save(*args, **kwargs)
+
 
 class VerifyCode(models.Model):
     '''

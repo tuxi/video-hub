@@ -55,9 +55,11 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     '''
     修改用户的序列化
     '''
+
+    avatar = serializers.ImageField(label="头像", help_text="头像", required=False)
     class Meta:
         model = User
-        fields = ('nickname', 'username' ,'gender', 'birthday', 'email', 'mobile', 'avatar', 'head_background', 'website', 'summary')
+        fields = ('nickname', 'gender', 'birthday', 'email', 'mobile', 'avatar', 'head_background', 'website', 'summary')
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     '''
