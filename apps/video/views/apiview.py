@@ -34,7 +34,7 @@ class VideotViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Retri
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filter_class = VideoFilter
     search_fields = ('content', )
-    ordering_fields = ('audit_completed_time', 'click_num', 'view_num', )
+    ordering_fields = ('audit_completed_time', 'id', 'upload_time', 'click_num', 'view_num', )
     # 单独在此视图中配置访问权限, 必须登录才能访问，如果登录了，将登录的用户和登录的令牌存在request中
     authentication_classes = (JSONWebTokenAuthentication, authentication.SessionAuthentication)
 
