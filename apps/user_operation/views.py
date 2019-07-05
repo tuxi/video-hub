@@ -16,8 +16,7 @@ from django.contrib.auth import get_user_model
 
 from utils.permissions import IsOwnerOrReadOnly
 from .models import UserFavorite
-from .serializers import UserFavoriteDetailSerializer, UserFavoriteSerializer
-from .serializers import UserPublishedListSerializer
+from .serializers import UserFavoriteDetailSerializer, UserFavoriteSerializer, UserHomeSerializer, UserPublishedListSerializer
 
 User = get_user_model()
 
@@ -58,3 +57,34 @@ class UserPublishedListViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixi
 
     def retrieve(self, request, *args, **kwargs):
         return super(UserPublishedListViewSet, self).retrieve(request=request)
+
+class UserHomeListViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin):
+    '''
+    list:
+        用于获取用户发布的动态内容列表
+    '''
+    queryset = User.objects.filter(is_active=True)
+    serializer_class = UserHomeSerializer
+    # lookup_field = 'id'
+
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        dict = serializer.data
+        videos = dict.get('videos')
+        liking = dict.get('liking')
+        segments = []
+        if videos != None:
+            segments.append(videos)
+            del dict['videos']
+        if liking != None:
+            segments.append(liking)
+            del dict['liking']
+
+        new_dict = {
+            'user': dict,
+            'segments': segments
+        }
+
+        return Response(new_dict)

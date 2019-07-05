@@ -24,7 +24,7 @@ class LikeToggleView(mixins.CreateModelMixin,
     list:
         获取用户收藏列表
     retrieve:
-        判断某个content是否已收藏
+        获取某个content是否已收藏
     create:
         收藏 content
     '''
