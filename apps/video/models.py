@@ -7,11 +7,13 @@
 
 import hashlib
 
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.utils import timezone as datetime
 
 from videokit.models import VideoField
 from django.contrib.auth import get_user_model
+from pinax.likes.models import Like
 
 User = get_user_model()
 
@@ -94,6 +96,8 @@ class Video(models.Model):
     poi_address = models.CharField(max_length=300, unique=False, null=False, blank=False, verbose_name='poi地址')
 
     source = models.CharField(max_length=1, choices=VIDEO_SOURCE, default='c', verbose_name="视频来源")
+    # #只是为了反向查询
+    likes = GenericRelation(to=Like, verbose_name="likes", content_type_field="content_type", object_id_field="object_id")
 
     # browse_password = models.CharField(max_length=20, null=True, blank=True, verbose_name="浏览密码", help_text="浏览密码")
     # browse_password_encrypt = models.CharField(max_length=100, null=True, blank=True, verbose_name="浏览密码加密",

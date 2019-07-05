@@ -9,6 +9,8 @@
 from rest_framework import permissions
 from django.contrib.auth import get_user_model
 
+from pinax.likes.models import Like
+
 User = get_user_model()
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
@@ -24,8 +26,10 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
             return True
 
         # Instance must have an attribute named `owner`.
-        return obj.user == request.user
 
+        if isinstance(obj, Like):
+            return obj.sender == request.user
+        return obj.user == request.user
     def has_permission(self, request, view):
         try:
             user = request.user

@@ -80,6 +80,11 @@ class VideoCreateSerializer(serializers.ModelSerializer):
     first_create_time = serializers.DateTimeField(required=True, label="视频首次在本地创建的时间")
     source = serializers.CharField(required=True, label="视频来源")
 
+    # 让user是隐藏字段, user字段不需要前端直接传递，从requst中就可以拿到授权的user，最终与video关联起来
+    user = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
+
     def fix_video_file_name(self, video_file):
         '''
         解决上传的文件名太长问题
@@ -106,13 +111,13 @@ class VideoCreateSerializer(serializers.ModelSerializer):
         :return:
         '''
         # 请求的用户
-        user = self.context['request'].user
-
-        # 请求的参数username
-        user_id = user.id
-        # if user_id == None:
-        #     user_id = 1
-        validated_data["user_id"] = user_id
+        # user = self.context['request'].user
+        #
+        # # 请求的参数username
+        # user_id = user.id
+        # # if user_id == None:
+        # #     user_id = 1
+        # validated_data["user_id"] = user_id
 
         self.fix_video_file_name(validated_data["video"])
 
@@ -126,7 +131,7 @@ class VideoCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Video
         # 注册用户时需要post的字段
-        fields = ("content", "cover_duration", "cover_start_second", "video", "longitude", "latitude" , "poi_name", "poi_address", "first_create_time", "source", )
+        fields = ("user", "content", "cover_duration", "cover_start_second", "video", "longitude", "latitude" , "poi_name", "poi_address", "first_create_time", "source", )
 
 class VideoDetailNoUserSerializer(serializers.ModelSerializer):
     '''

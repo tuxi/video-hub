@@ -52,3 +52,4 @@ class UserPublishedListSerializer(serializers.ModelSerializer):
         fields = (
         'id', 'nickname', 'username', 'gender', 'birthday', 'email', 'mobile', 'avatar', 'head_background', 'website',
         'summary', 'videos')
+

@@ -28,6 +28,7 @@ import xadmin
 from users.views import SmsCodeViewSet, UserViewSet
 from video.views.apiview import VideotViewSet, HotSearchsViewSet
 from user_operation.views import UserFavoriteViewSet, UserPublishedListViewSet
+from pinax.likes.apiviews import LikeToggleView
 
 # 通过router绑定url
 router = DefaultRouter()
@@ -46,9 +47,10 @@ router.register(r'favorites', UserFavoriteViewSet, base_name='favorites')
 # 时光轴
 router.register(r'vtimeline', UserPublishedListViewSet, base_name="vtimeline")
 
-# video_list = VideoListViewSet.as_view({
-#     'get': 'list',
-# })
+# 用户点赞列表、添加点赞、删除点赞
+# select *from django_content_type
+router.register(r'likes', LikeToggleView, base_name='likes')
+
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
@@ -62,4 +64,5 @@ urlpatterns = [
     url(r'^login/', obtain_jwt_token),
     # drf 文档
     url(r'docs/', include_docs_urls(title="Video hub api docs")),
+    # url(r"^likes/", include("pinax.likes.urls", namespace="pinax_likes")),
 ]

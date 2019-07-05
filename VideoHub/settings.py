@@ -61,7 +61,8 @@ EXTRA_APPS = [
 PERSONAL_APPS = [
     'video.apps.VideoConfig',
     'users.apps.UsersConfig',
-    'user_operation.apps.UserOperationConfig'
+    'user_operation.apps.UserOperationConfig',
+    'pinax.likes.apps.AppConfig',
 ]
 
 INSTALLED_APPS += PERSONAL_APPS + EXTRA_APPS
@@ -155,6 +156,7 @@ USE_TZ = False   #默认是Ture，时间是utc时间，由于我们要用本地�
 AUTHENTICATION_BACKENDS = (
     # 使用自定义的用户验证, 用户登录时调用 users.views.CustomBackend验证
     'users.views.CustomBackend',
+    'pinax.likes.auth_backends.CanLikeBackend',
 )
 
 import datetime
@@ -209,5 +211,22 @@ CACHES = {
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
+    }
+}
+
+# pinax likes app config
+PINAX_LIKES_LIKABLE_MODELS = {
+    "users.UserProfile": {
+            "like_text_on": "unlike",
+            # "css_class_on": "fa-heart",
+            "like_text_off": "like",
+            # "css_class_off": "fa-heart-o",
+            "allowed": lambda user, obj: True
+        },
+    "videos.Video": {
+            "like_text_on": "unlike",
+            "css_class_on": "fa-heart",
+            "like_text_off": "like",
+            "css_class_off": "fa-heart-o"
     }
 }
