@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions, status, authentication, mixins
+from rest_framework import viewsets, status, mixins, filters
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.authentication import SessionAuthentication
@@ -6,13 +6,16 @@ from rest_framework.response import Response
 
 from django.shortcuts import get_object_or_404
 from django.contrib.contenttypes.models import ContentType
+from django_filters.rest_framework import DjangoFilterBackend
+
 
 from pinax.likes.models import Like
 from pinax.likes.signals import object_liked, object_unliked
-from pinax.likes.utils import widget_context
 
 from utils.permissions import IsOwnerOrReadOnly
+from utils.utils import CustomPagination
 from .serializers import LikeCreateSerializer, LikeDetailSerializer
+from .filters import LikeFilter
 
 
 class LikeToggleView(mixins.CreateModelMixin,
@@ -32,6 +35,16 @@ class LikeToggleView(mixins.CreateModelMixin,
     permission_classes = (IsAuthenticated, IsOwnerOrReadOnly,)
     # 用户认证
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+    #  根据content_type 和用户id获取收藏列表
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    filter_class = LikeFilter
+    pagination_class = CustomPagination
+    ordering_fields = ('-timestamp',)
+
+    # 配置url后面的Path Parameters使用 lookup_field 或者 lookup_url_kwarg
+    #  用于对单个模型实例的对象查找的字段，默认为'pk'。请注意，使用超链接API时，如果需要使用自定义值，则需要确保API视图和序列化器类都设置该查找字段
+    # lookup_field = 'receiver_content_type' # 修改默认的”pk”来查询模型类对象
+    #lookup_url_kwarg: 对象查找的URL关键字参数。URLconf应包含与该值相对应的关键字参数。 如果取消设置，则默认使用与lookup_field相同的值。
 
     def get_serializer_class(self):
         if self.action == 'list':

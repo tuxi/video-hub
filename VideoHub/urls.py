@@ -27,7 +27,7 @@ import xadmin
 
 from users.views import SmsCodeViewSet, UserViewSet
 from video.views.apiview import VideotViewSet, HotSearchsViewSet
-from user_operation.views import UserFavoriteViewSet, UserPublishedListViewSet, UserHomeListViewSet
+from user_operation.views import UserPublishedListViewSet, UserHomeListViewSet
 from pinax.likes.apiviews import LikeToggleView
 
 # 通过router绑定url
@@ -41,14 +41,12 @@ router.register(r'code', SmsCodeViewSet, base_name='code')
 router.register(r'hot_searchs', HotSearchsViewSet, base_name='hot_searchs')
 # 用户
 router.register(r'users', UserViewSet, base_name='users')
-# 收藏
-router.register(r'favorites', UserFavoriteViewSet, base_name='favorites')
 
 # 时光轴
 router.register(r'vtimeline', UserPublishedListViewSet, base_name="vtimeline")
 router.register(r'user_home', UserHomeListViewSet, base_name='user_home')
 
-# 用户点赞列表、添加点赞、删除点赞
+# 用户点赞列表、添加点赞、删除点赞 6
 # select *from django_content_type
 router.register(r'likes', LikeToggleView, base_name='likes')
 
