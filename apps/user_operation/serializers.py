@@ -66,7 +66,8 @@ class UserHomeSerializer(serializers.ModelSerializer):
 
         jsonList = []
         for video in list:
-           jsonList.append(VideoDetailSerializer(instance=video).data)
+            # 必须要把context带过去，不然此序列化会导致缺少request，序列化的url不是完整的地址
+           jsonList.append(VideoDetailSerializer(instance=video, context=self.context).data)
         return {
             "title": "作品",
             'data': jsonList,

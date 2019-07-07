@@ -57,7 +57,8 @@ class VideoDetailSerializer(serializers.ModelSerializer):
         :param instance: video instance
         :return:
         '''
-        user = self.context['request'].user
+        request = self.context.get('request')
+        user = request.user
         if user != None and isinstance(user, User):
 
             likes = instance.likes.filter(sender=user)
