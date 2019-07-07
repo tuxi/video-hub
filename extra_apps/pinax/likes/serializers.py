@@ -27,8 +27,8 @@ class LikeCreateSerializer(serializers.ModelSerializer):
             )
         ]
 
-        fields = ("sender", "receiver_content_type", "receiver_object_id")
-        read_only_fields = ('id',)
+        fields = ("sender", "receiver_content_type", "receiver_object_id", 'id')
+        # read_only_fields = ('id',)
 
 
 class LikeDetailSerializer(serializers.ModelSerializer):
