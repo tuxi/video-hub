@@ -39,11 +39,15 @@ class VideoDetailSerializer(serializers.ModelSerializer):
 
     # 序列化时，如果存在ForeignKey这样的字段，比如user，默认序列化的是id，如果要序列化这个ForeignKey对于的model，则需要重载对应的字段，这样这个字段会根据其UserDetailSerializer嵌入到序列化中
     user = UserDetailSerializer()
+    like_num = serializers.SerializerMethodField()
+
     class Meta:
         model = Video
         fields = '__all__'
 
-
+    def get_like_num(self, instance):
+        likes = instance.likes.all()
+        return len(likes)
 
 
 class VideoCreateSerializer(serializers.ModelSerializer):

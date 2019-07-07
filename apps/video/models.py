@@ -96,8 +96,8 @@ class Video(models.Model):
     poi_address = models.CharField(max_length=300, unique=False, null=False, blank=False, verbose_name='poi地址')
 
     source = models.CharField(max_length=1, choices=VIDEO_SOURCE, default='c', verbose_name="视频来源")
-    # #只是为了反向查询
-    likes = GenericRelation(to=Like, verbose_name="likes", content_type_field="content_type", object_id_field="object_id")
+    # #只是为了反向查询 likes = vodeo.likes.all(), 这篇文章记录了怎么使用http://blog.donews.com/limodou/archive/2006/12/31/1106217.aspx
+    likes = GenericRelation(to=Like, verbose_name="likes", content_type_field="receiver_content_type", object_id_field="receiver_object_id")
 
     # browse_password = models.CharField(max_length=20, null=True, blank=True, verbose_name="浏览密码", help_text="浏览密码")
     # browse_password_encrypt = models.CharField(max_length=100, null=True, blank=True, verbose_name="浏览密码加密",

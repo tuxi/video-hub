@@ -8,7 +8,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
-from video.serializers import VideoDetailNoUserSerializer
+from video.serializers import VideoDetailNoUserSerializer, VideoDetailSerializer
 from pinax.likes.models import Like
 from video.models import Video
 
@@ -16,7 +16,7 @@ User = get_user_model()
 
 
 class UserPublishedListSerializer(serializers.ModelSerializer):
-    videos = VideoDetailNoUserSerializer(many=True)
+    videos = VideoDetailSerializer(many=True)
     class Meta:
         model = User
         fields = (
@@ -24,7 +24,7 @@ class UserPublishedListSerializer(serializers.ModelSerializer):
         'summary', 'videos')
 
 class UserHomeSerializer(serializers.ModelSerializer):
-    # videos = VideoDetailNoUserSerializer(many=True)
+    # videos = VideoDetailSerializer(many=True)
     # liking = LikeDetailSerializer(many=True)
     videos = serializers.SerializerMethodField()
     liking = serializers.SerializerMethodField()
@@ -66,7 +66,7 @@ class UserHomeSerializer(serializers.ModelSerializer):
 
         jsonList = []
         for video in list:
-           jsonList.append(VideoDetailNoUserSerializer(instance=video).data)
+           jsonList.append(VideoDetailSerializer(instance=video).data)
         return {
             "title": "作品",
             'data': jsonList,
