@@ -41,6 +41,7 @@ class LikeToggleView(mixins.CreateModelMixin,
     pagination_class = CustomPagination
     ordering_fields = ('-timestamp',)
 
+
     # 配置url后面的Path Parameters使用 lookup_field 或者 lookup_url_kwarg
     #  用于对单个模型实例的对象查找的字段，默认为'pk'。请注意，使用超链接API时，如果需要使用自定义值，则需要确保API视图和序列化器类都设置该查找字段
     # lookup_field = 'receiver_content_type' # 修改默认的”pk”来查询模型类对象

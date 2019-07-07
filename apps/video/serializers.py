@@ -40,8 +40,8 @@ class VideoDetailSerializer(serializers.ModelSerializer):
     # 序列化时，如果存在ForeignKey这样的字段，比如user，默认序列化的是id，如果要序列化这个ForeignKey对于的model，则需要重载对应的字段，这样这个字段会根据其UserDetailSerializer嵌入到序列化中
     user = UserDetailSerializer()
     like_num = serializers.SerializerMethodField()
-    # 当前登录的用户是否点赞了此视频
-    is_like = serializers.SerializerMethodField()
+    # 当前登录的用户点赞此视频 id
+    like_id = serializers.SerializerMethodField()
 
     class Meta:
         model = Video
@@ -51,9 +51,10 @@ class VideoDetailSerializer(serializers.ModelSerializer):
         likes = instance.likes.all()
         return len(likes)
 
-    def get_is_like(self, instance):
+    def get_like_id(self, instance):
         '''
         查找授权的用户是否对此视频点赞了
+        用户登录后才会有此字段，方便返回给客户端删除点赞的
         :param instance: video instance
         :return:
         '''
@@ -62,8 +63,9 @@ class VideoDetailSerializer(serializers.ModelSerializer):
         if user != None and isinstance(user, User):
 
             likes = instance.likes.filter(sender=user)
-            return len(likes) > 0
-        return False
+            if len(likes):
+                return likes[0].pk
+        return -1
 
 class VideoCreateSerializer(serializers.ModelSerializer):
     '''
