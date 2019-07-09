@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders', # 跨域访问 解决
     'videokit.apps.VideokitConfig',
 ]
 
@@ -53,7 +54,6 @@ EXTRA_APPS = [
     'django_filters',
     'crispy_forms',
     'rest_framework',
-    'corsheaders', # 跨域访问 解决
     'rest_framework.authtoken',  # 用户登录
     'gunicorn',
 ]
@@ -83,6 +83,10 @@ MIDDLEWARE = [
 CORS_ORIGIN_REGEX_WHITELIST = r'.*'
 # 必须有这个才接受前端跨域发送 cookie
 CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
+
+# 允许所有的请求头
+CORS_ALLOW_HEADERS = (' * ')
 
 ROOT_URLCONF = 'VideoHub.urls'
 
