@@ -1,4 +1,4 @@
-Django==1.11
+Django==1.11.22
 django-cors-headers==2.1.0 # 解决跨域访问问题
 djangorestframework==3.6.3
 django-crispy-forms==1.6.1
