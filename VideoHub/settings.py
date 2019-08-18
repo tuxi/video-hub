@@ -32,7 +32,30 @@ SECRET_KEY = '_x-$8!ku_q!shjw5^p1)k#mbe0%_q=u3vhw2a=y8lh%$q#ov*4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'api.enba.com', '10.211.55.4', 'enba.com']
+
+# 服务端监听的端口 host
+CHAT_WS_SERVER_HOST = '127.0.0.1'
+CHAT_WS_SERVER_PORT = 5002
+CHAT_WS_SERVER_PROTOCOL = 'ws'
+# 客户端请求的的端口 host
+if DEBUG:
+    # 测试环境请求websocket的服务器地址
+    CHAT_WS_CLIENT_HOST = CHAT_WS_SERVER_HOST
+    CHAT_WS_CLIENT_PORT = CHAT_WS_SERVER_PORT
+    CHAT_WS_CLIENT_ROUTE = ''
+    CHAT_WS_CLIENT_PROTOCOL = 'ws'
+else:
+    # 生产环境使用nginx做websocket的反向代理所监听的端口和host
+    CHAT_WS_CLIENT_ROUTE = 'ws/'
+
+    CHAT_WS_CLIENT_HOST = 'chat.enba.com'
+    CHAT_WS_CLIENT_PROTOCOL = 'wss'
+    CHAT_WS_CLIENT_PORT = 443
+
+    #CHAT_WS_CLIENT_HOST = '10.211.55.4'
+    #CHAT_WS_CLIENT_PROTOCOL = 'ws'
+    #CHAT_WS_CLIENT_PORT = 80
 
 AUTH_USER_MODEL = 'users.UserProfile'
 
@@ -58,6 +81,14 @@ EXTRA_APPS = [
     'gunicorn',
 ]
 
+DJANGO_PRIVATE_CHAT = [
+    # django-private-chat config
+    'debug_toolbar',
+    'django_private_chat',
+]
+
+EXTRA_APPS += DJANGO_PRIVATE_CHAT
+
 PERSONAL_APPS = [
     'video.apps.VideoConfig',
     'users.apps.UsersConfig',
@@ -67,7 +98,8 @@ PERSONAL_APPS = [
 
 INSTALLED_APPS += PERSONAL_APPS + EXTRA_APPS
 
-MIDDLEWARE = [
+__MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -77,6 +109,15 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+from django import get_version
+from packaging import version
+
+if version.parse(get_version()) < version.parse("1.10"):
+    MIDDLEWARE_CLASSES = __MIDDLEWARE
+    MIDDLEWARE_CLASSES += ['django.contrib.auth.middleware.SessionAuthenticationMiddleware', ]
+else:
+    MIDDLEWARE = __MIDDLEWARE
 
 
 # 必须跟原域匹配才可获取发送 cookie 的权限
@@ -123,7 +164,8 @@ DATABASES = {
         'PASSWORD': 'root',  # 数据库密码
         'HOST': '127.0.0.1', # 数据库主机，留空默认为localhost
         'PORT': 3306, # 数据库端口
-        "OPTIONS": {"init_command":  "SET default_storage_engine=INNODB;"}
+        # 数据库引擎 用于后期第三方登录数据表的建立，charset': 'utf8mb4'支持emoji
+        "OPTIONS":{"init_command":"SET default_storage_engine=INNODB;", 'charset': 'utf8mb4'},
     }
 }
 
@@ -154,7 +196,10 @@ LANGUAGE_CODE = 'zh-hans'  #中文支持，django1.8以后支持；1.8以前是z
 TIME_ZONE = 'Asia/Shanghai'
 USE_I18N = True
 USE_L10N = True
-USE_TZ = False   #默认是Ture，时间是utc时间，由于我们要用本地时间，所用手动修改为false！！！！
+USE_TZ = True
+# USE_TZ = False   #默认是Ture，时间是utc时间，由于我们要用本地时间，所用手动修改为false！！！！
+
+DATETIME_FORMAT = "Y.m.d H:i:s"
 
 
 AUTHENTICATION_BACKENDS = (
@@ -192,13 +237,9 @@ REST_FRAMEWORK = {
 
 
 STATIC_URL = '/static/'
-# 部署的时候注释掉，不然无法执行collecstatic命令，运行时打开
-STATICFILES_DIRS = [
-   os.path.join(BASE_DIR, 'static'),
-]
 
 # 部署时收集静态文件collecstatic需要的目录配置，部署完成后注释掉，不然debug下报错无法读取static下的文件
-#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = "/media/"
 
@@ -234,3 +275,21 @@ PINAX_LIKES_LIKABLE_MODELS = {
             "css_class_off": "fa-heart-o"
     }
 }
+
+
+INTERNAL_IPS = ['127.0.0.1', 'localhost', 'api.enba.com', '10.211.55.4', 'enba.com']
+SESSION_COOKIE_AGE = 12096000
+LOGIN_REDIRECT_URL = '/xadmin/'
+
+# 配置django-debug-toolbar
+DEBUG_TOOLBAR_CONFIG = {
+    # 此项原本为google指向的一个js，改成这样就不会报404了。
+    'JQUERY_URL': '//cdn.bootcss.com/jquery/2.1.4/jquery.min.js'
+}
+
+
+# 我的[这篇文章](https://objc.com/article/56)记录了，drf自动生成的文档导致跨域的问题
+if DEBUG:
+    drf_docs_schema_url = ""
+else:
+    drf_docs_schema_url = "https://api.enba.com/"

@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <link href="{% static "chat/css/bootstrap.css" %}" rel="stylesheet" type="text/css" media="all">
+        <link href="{% static "chat/css/style.css" %}" rel="stylesheet" type="text/css" media="all">
+        <title>{% block title %}{% endblock %}</title>
+
+        {% block css %}{% endblock %}
+    </head>
+
+    <body>
+        {% block content %}{% endblock %}
+
+        <script src="{% static "chat/js/jquery.min.js" %}" type="text/javascript"></script>
+        <script src="{% static "chat/js/bootstrap.min.js" %}" type="text/javascript"></script>
+        <script src="{% static "chat/js/handlebars-v1.3.0.js" %}" type="text/javascript"></script>
+        {% block extra_js %}{% endblock %}
+    </body>
+
+</html>

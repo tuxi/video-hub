@@ -19,9 +19,9 @@ from django.views.static import serve
 # django rest_framework
 from rest_framework.documentation import include_docs_urls
 from rest_framework.routers import DefaultRouter
-from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token
 
-from VideoHub.settings import MEDIA_ROOT, STATICFILES_DIRS
+from VideoHub.settings import MEDIA_ROOT, STATIC_ROOT, drf_docs_schema_url
 
 import xadmin
 
@@ -54,14 +54,23 @@ router.register(r'likes', LikeToggleView, base_name='likes')
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
     url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
-    url(r'^', include(router.urls)),
+    url(r'^api/', include(router.urls)),
 
-    url(r'^static/(?P<path>.*)$', serve, {'document_root': STATICFILES_DIRS[0]}, name='static'),
-    # drf自带的认证方式
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    # jwt的认证方式
-    url(r'^login/', obtain_jwt_token),
+    url(r'^static/(?P<path>.*)$', serve, {'document_root': STATIC_ROOT}, name='static'),
+
+    # jwt的认证方式， 在iOS端使用的是jwt的认证方式，未使用rf自带的认证方式
+    url(r'^api/login/', obtain_jwt_token),
+    # 接受心跳包，验证jwt token是否有效，如果无效则以退出登陆
+    url(r'^api/heartbeat/', verify_jwt_token),
+
     # drf 文档
-    url(r'docs/', include_docs_urls(title="Video hub api docs")),
-    # url(r"^likes/", include("pinax.likes.urls", namespace="pinax_likes")),
+    url(r'api/docs/', include_docs_urls(title="Video hub api docs", schema_url=drf_docs_schema_url)),
+    # url(r"^api/likes/", include("pinax.likes.urls", namespace="pinax_likes")),
+
+    # drf自带的认证方式 web
+    # drf登陆的路由为auth/drf/login/ 退出为auth/drf/logout/
+    url(r'^auth/drf/', include('rest_framework.urls', namespace='rest_framework')),
+
+    # 测试聊天的页面
+    url(r'test/chat/', include('django_private_chat.urls')),
 ]
