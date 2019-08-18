@@ -111,6 +111,7 @@ apps/video/migrations/*
 apps/user_operation/migrations/*
 extra_apps/xadmin/migrations/*
 extra_apps/pinax/likes/migrations/*
+extra_apps/django_private_chat/migrations/*
 
 # 只保留忽略migrations目录下的__init__.py
 !apps/users/migrations/__init__.py
@@ -118,5 +119,6 @@ extra_apps/pinax/likes/migrations/*
 !extra_apps/xadmin/migrations/__init__.py
 !apps/user_operation/migrations/__init__.py
 !extra_apps/pinax/likes/migrations/__init__.py
+!extra_apps/django_private_chat/migrations/__init__.py
 
 private_config.py
