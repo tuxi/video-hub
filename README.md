@@ -1,10 +1,13 @@
 # video-hub
-搭建一个短视频后台, 原项目[shortVideo](https://github.com/tuxi/shortvideo), 使用Django REST framework 编写 RESTful API, 优化服务新建的项目
+一个短视频服务端, 原项目[shortVideo](https://github.com/tuxi/shortvideo), 基于Django REST framework 和ffmpeg, 并提供 RESTful API 接口。
+
+### Logs
+- 新增基于WebSocket的即时通讯服务 2019-8-19
 
 ### 可测试的api
 https://api.enba.com/docs/
 
-### 平台
+### 环境
 - ubuntu 16.04
 - python3.6
 
