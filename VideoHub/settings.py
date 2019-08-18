@@ -30,7 +30,7 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
 SECRET_KEY = '_x-$8!ku_q!shjw5^p1)k#mbe0%_q=u3vhw2a=y8lh%$q#ov*4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -194,11 +194,11 @@ REST_FRAMEWORK = {
 STATIC_URL = '/static/'
 # 部署的时候注释掉，不然无法执行collecstatic命令，运行时打开
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+   os.path.join(BASE_DIR, 'static'),
 ]
 
 # 部署时收集静态文件collecstatic需要的目录配置，部署完成后注释掉，不然debug下报错无法读取static下的文件
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = "/media/"
 
