@@ -36,7 +36,7 @@ ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'api.enba.com', '10.211.55.4', 'enba.
 
 # 服务端监听的端口 host
 CHAT_WS_SERVER_HOST = '127.0.0.1'
-CHAT_WS_SERVER_PORT = 5002
+CHAT_WS_SERVER_PORT = 5003
 CHAT_WS_SERVER_PROTOCOL = 'ws'
 # 客户端请求的的端口 host
 if DEBUG:
