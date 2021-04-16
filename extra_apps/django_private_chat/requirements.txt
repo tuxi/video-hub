@@ -14,4 +14,4 @@ codecov>=2.0.0
 django-test-plus==1.0.17
 
 packaging==16.8
-django-debug-toolbar==1.6
+django-debug-toolbar==1.11.1
